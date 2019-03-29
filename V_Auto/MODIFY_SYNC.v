@@ -16,7 +16,7 @@ always @(posedge PCLK)begin
   //LEVEL LOW COUNTER
        if ( rS & !S  ) { NUM_H , CNT } <=  {CNT  , 16'h0 }   ; 
   else if ( !rS & S  ) { NUM_L , CNT } <=  {CNT  , 16'h0 }   ; 
-  else CNT<=CNT+1 ; 
+  else CNT <= CNT + 16'd1; 
   end
   
   

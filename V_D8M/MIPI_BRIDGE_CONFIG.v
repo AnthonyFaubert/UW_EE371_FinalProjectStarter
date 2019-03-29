@@ -33,7 +33,7 @@ output reg  R_GO,
 	output [7:0]     WORD_BYTE	,
    output [15:0]    R_DATA,
 	output           SDAI_W ,
-	output           TR ,
+//	output           TR ,
 	output           I2C_SCL_O  ,
 	output reg MIPI_BRIDGE_CONFIG_RELEASE  , 
    output [15:0 ] PLLControlRegister0,   
@@ -128,7 +128,7 @@ case (ST)
 9: begin 
    if  ( R_END ) begin 
 	       if ( CNT==0 )  ID    <= R_DATA ; 
-	  CNT<=CNT+1 ;
+	  CNT <= CNT + 8'd1;
 	  ST<=10 ; 	
 	end 
   end	
@@ -175,7 +175,7 @@ end
 	end       	
 34: begin 
      if  ( W_WORD_END )  begin 	
-			  WCNT<=WCNT+1 ;			 
+			  WCNT <= WCNT + 8'd1;			 
 			  ST<=35 ; 
 	  end
 	end              
@@ -200,7 +200,7 @@ end
 41: begin 
     if ( DELY == REG16_DATA16[15:0] * 5  )   begin 
 	  ST<=42; 
-	  WCNT <=WCNT+1 ; 
+	  WCNT <= WCNT + 8'd1; 
 	 end  
 	 else  DELY <=DELY +1;	
 end 	 

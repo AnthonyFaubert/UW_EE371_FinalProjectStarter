@@ -29,7 +29,7 @@ module VCM_I2C (
 	output [7:0]     WORD_BYTE	,
    output [15:0]    R_DATA,
 	output           SDAI_W ,
-	output           TR ,
+//	output           TR ,
 	output           I2C_SCL_O   ,
 	input            TEST_MODE   
 	
@@ -113,8 +113,8 @@ case (ST)
 9: begin 
    if  ( R_END ) begin 
 	  if ( CNT==0 )  R_VCM_DATA   <= R_DATA ; 
-	    CNT<=CNT+1 ;
-	    ST<=10 ; 	
+	    CNT <= CNT + 8'd1;
+	    ST <= 10; 	
 	end 
   end	
 10: begin   
@@ -166,7 +166,7 @@ end
 	end       	
 34: begin 
      if  ( W_WORD_END )  begin 	
-			 WCNT<=WCNT+1 ;			 
+			 WCNT <= WCNT + 8'd1;			 
 			 ST<=35 ; 
 	  end
 	end              
@@ -204,7 +204,7 @@ wire   SDAO;
 assign I2C_SCL_O       = W_WORD_SCL & W_POINTER_SCL & R_SCL ;
 assign SDAO            = W_POINTER_SDAO & R_SDAO  & W_WORD_SDAO;
 assign I2C_SDA         = ( ( SDAO )     ||  ( RESET_N==0 ) )?1'bz :const_zero_sig;
-assign I2C_SCL         = ( ( I2C_SCL_O)  || ( RESET_N==0 ) )?1'b1 :0 ;
+assign I2C_SCL         = ( ( I2C_SCL_O)  || ( RESET_N==0 ) );
 
 //==== I2C WRITE WORD ===
 wire   W_WORD_SCL ; 

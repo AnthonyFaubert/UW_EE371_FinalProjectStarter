@@ -9,7 +9,7 @@ module MIPI_BRIDGE_CAMERA_Config   (
  inout  CAMERA_I2C_SDA,
  output CAMERA_I2C_RELAESE,
  
- output [9:0] STEP ,
+ //output [9:0] STEP ,
  output       VCM_RELAESE 
 
  ); 
@@ -18,6 +18,7 @@ module MIPI_BRIDGE_CAMERA_Config   (
 
  //wire VCM_RELAESE ;
  wire VCM_I2C_SCL ; 
+ assign VCM_I2C_SCL = 0; // Added because it wasn't being driven and was defaulting to zero anyways
 //---FIRST VCM-TEST 
 //VCM_TEST   vmt( 
 //   .RESET_N     ( 0 ),//RESET_N  & MIPI_I2C_RELEASE),

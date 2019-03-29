@@ -15,13 +15,13 @@ always @(negedge VGA_VS or posedge VGA_CLK )begin
   if ( !VGA_VS ) begin 
     X_Cont<=0;
     Y_Cont<=0;
-end 
-else 
-begin 
-  rDVAL <= READ_Request   ; 
-  if ( !rDVAL)    X_Cont<=0;  else  X_Cont<=X_Cont+1 ;   
-  if (  rDVAL  && !READ_Request)    Y_Cont <=Y_Cont+1 ; 
-end 
+  end else begin 
+    rDVAL <= READ_Request   ; 
+    if (!rDVAL) X_Cont <= 0;
+    else        X_Cont <= X_Cont + 11'd1;   
+  
+    if (rDVAL && !READ_Request) Y_Cont <= Y_Cont + 11'd1; 
+  end 
 end 
 
 endmodule 

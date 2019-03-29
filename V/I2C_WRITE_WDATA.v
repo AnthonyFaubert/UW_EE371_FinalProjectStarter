@@ -24,9 +24,9 @@ module I2C_WRITE_WDATA  (
 //parameter 	BYTE_NUM = 4;
  
 //===reg/wire  
-reg   [8:0]A ;
-reg   [7:0]DELY ;
-assign SDAI_W =SDAI ;
+reg [8:0] A;
+reg [7:0] DELY;
+assign SDAI_W = SDAI;
 
 
 
@@ -69,7 +69,7 @@ else
 	    4: begin  //start 
 		      ST <=5 ; 
 			   SCLO <= 1'b1 ; 
-				CNT <= CNT +1 ;
+				CNT <= CNT + 8'd1 ;
 		    end
 			 
 	    5: begin  //start 
@@ -138,9 +138,9 @@ else
 			   { SDAO, A } <= { A ,1'b0 }; 
 		    end
 	    34: begin  //start 
-		      ST <=35 ; 
-			   SCLO <= 1'b1 ; 
-				CNT <= CNT +1 ;
+		      ST <= 35; 
+			   SCLO <= 1'b1; 
+				CNT <= CNT + 8'd1;
 		    end
 			 
 	    35: begin  
@@ -150,7 +150,7 @@ else
 		    end	
  			 
 	    36: begin  
-		         DELY<=DELY+1;
+		         DELY <= DELY + 8'd1;
 				   if ( DELY > 10 )  begin 
 							 //if ( LIGHT_INT==1 ) begin 
 							  ST <= 31 ;  { SDAO,  SCLO } <= 2'b11; 

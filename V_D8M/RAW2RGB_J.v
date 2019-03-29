@@ -59,8 +59,10 @@ Line_Buffer_J 	u0	(
 	
 
 reg    RD_EN ; 
-always @( posedge VGA_CLK  )  RD_EN <= (( mX_Cont > D8M_VAL_LINE_MIN ) && (mX_Cont < D8M_VAL_LINE_MAX ))?1:0 ; 		
-						
+always @(posedge VGA_CLK) begin
+	RD_EN <= ((mX_Cont > D8M_VAL_LINE_MIN) & (mX_Cont < D8M_VAL_LINE_MAX));
+end
+
 RAW_RGB_BIN  bin(
       .CLK  ( VGA_CLK ), 
       .RESET_N ( RD_EN ) , 

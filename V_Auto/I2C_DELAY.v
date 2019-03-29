@@ -1,8 +1,8 @@
 module I2C_DELAY  (
   input  RESET_N,
   input  CLK , 
-  output reg READY ,
-  output reg READY1
+  output reg READY
+//  output reg READY1
 );
 
 reg [31:0] DELAY  ;  

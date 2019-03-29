@@ -64,8 +64,8 @@ module control_interface(
 
    input                           CLK;                    // System Clock
    input                           RESET_N;                // System Reset
-   input [2:0] 			   CMD;                    // Command input
-   input [`ASIZE-1:0] 		   ADDR;                   // Address
+   input [2:0]                     CMD;                    // Command input
+   input [`ASIZE-1:0]              ADDR;                   // Address
    input                           REF_ACK;                // Refresh request acknowledge
    input 			   INIT_ACK;				// Initial request acknowledge
    input                           CM_ACK;                 // Command acknowledge
@@ -75,7 +75,7 @@ module control_interface(
    output                          REFRESH;                // Decoded REFRESH command
    output                          PRECHARGE;              // Decoded PRECHARGE command
    output                          LOAD_MODE;              // Decoded LOAD_MODE command
-   output [`ASIZE-1:0] 		   SADDR;                  // Registered version of ADDR
+   output [`ASIZE-1:0]             SADDR;                  // Registered version of ADDR
    output                          REF_REQ;                // Hidden refresh request
    output                          INIT_REQ;               // Hidden initial request
    output                          CMD_ACK;                // Command acknowledge
@@ -88,14 +88,14 @@ module control_interface(
    reg                             REFRESH;
    reg                             PRECHARGE;
    reg                             LOAD_MODE;
-   reg [`ASIZE-1:0] 		   SADDR;
+   reg [`ASIZE-1:0]                SADDR;
    reg                             REF_REQ;
    reg                             INIT_REQ;
    reg                             CMD_ACK;
 
    // Internal signals
-   reg [15:0] 			   timer;
-   reg [15:0] 			   init_timer;
+   reg [15:0]                      timer;
+   reg [15:0]                      init_timer;
 
 
 
@@ -130,34 +130,36 @@ module control_interface(
 
    //  Generate CMD_ACK
    always @(posedge CLK or negedge RESET_N) begin
-        if (RESET_N == 0)
-          CMD_ACK <= 0;
-        else
-          if ((CM_ACK == 1) & (CMD_ACK == 0))
-            CMD_ACK <= 1;
-          else
-            CMD_ACK <= 0;
-     end
+      if (RESET_N == 0) begin
+         CMD_ACK <= 0;
+      end else begin
+         if ((CM_ACK == 1) & (CMD_ACK == 0))
+           CMD_ACK <= 1;
+         else
+           CMD_ACK <= 0;
+      end
+   end
 
 
    // refresh timer
    always @(posedge CLK or negedge RESET_N) begin
-      REF_REQ <= 0;
-
       if (RESET_N == 0) begin
-         timer           <= 0;
+         timer   <= 0;
+         REF_REQ <= 0;
       end else begin
          if (REF_ACK == 1) begin
             timer <= REF_PER; // 1024
+            REF_REQ <= 0;
 	 end else if (INIT_REQ == 1) begin
             timer <= REF_PER+200; // 1224
+            REF_REQ <= 0;
          end else begin
             timer <= timer - 1'b1;
 	    
-            if (timer==0) REF_REQ    <= 1;
-	    else REF_REQ <= REF_REQ;
+            if (timer==0) REF_REQ <= 1;
          end
       end
+   end
 
    // boot sequence "initial timer"
    always @(posedge CLK or negedge RESET_N) begin
@@ -169,7 +171,7 @@ module control_interface(
 	 INIT_REQ	  <= 0;
       end else begin
 	 // Default to zeros
-	 {REFRESH, PRECHARGE, LOAD_MODE, INIT_REQ} <= '0;
+	 {REFRESH, PRECHARGE, LOAD_MODE, INIT_REQ} <= 0;
 	 
 	 // only increment init timer when it's <= 24200
 	 if (init_timer < (INIT_PER + 201)) init_timer <= init_timer + 1; // init_timer++

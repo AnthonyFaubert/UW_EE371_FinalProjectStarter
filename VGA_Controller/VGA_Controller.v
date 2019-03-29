@@ -35,14 +35,14 @@ always@(posedge iCLK or negedge iRST_N)
 begin
 	if(!iRST_N)
 	begin
-		H_Cont		<=	0;
+		H_Cont	 <= 13'd0;
 	end
 	else
 	begin
 		if (H_Cont < H_SYNC_TOTAL)
-			H_Cont	<=	H_Cont+1;
+			H_Cont <= H_Cont + 13'd1;
 		else
-			H_Cont	<=	0;
+			H_Cont <= 13'd0;
 	end
 end
 
@@ -51,24 +51,24 @@ always@(posedge iCLK or negedge iRST_N)
 begin
 	if(!iRST_N)
 	begin
-		V_Cont		<=	0;
+		V_Cont		<=	13'd0;
 	end
 	else
 	begin
 		if (H_Cont == 0)
 		begin
 			if( V_Cont < V_SYNC_TOTAL )
-				V_Cont	 <=	V_Cont+1;
+				V_Cont	 <=	V_Cont + 13'd1;
 			else
-				V_Cont	<=	0;
+				V_Cont	<=	13'd0;
 		end
 	end
 end
 
 //---output 
 assign oVGA_BLANK	=   ~((H_Cont < H_BLANK ) || ( V_Cont < V_BLANK ));
-assign oVGA_H_SYNC =	( ( H_Cont > (H_SYNC_FRONT-H_MARK1 ) )  &&  ( H_Cont <= (H_SYNC_CYC + H_SYNC_FRONT-H_MARK1)))?0 :1 ; 
-assign oVGA_V_SYNC =	( ( V_Cont > (V_SYNC_FRONT ) )  &&  ( V_Cont <= (V_SYNC_CYC + V_SYNC_FRONT)))?0 :1 ; 
+assign oVGA_H_SYNC =	~( ( H_Cont > (H_SYNC_FRONT-H_MARK1 ) )  &&  ( H_Cont <= (H_SYNC_CYC + H_SYNC_FRONT-H_MARK1))); 
+assign oVGA_V_SYNC =	~( ( V_Cont > (V_SYNC_FRONT ) )  &&  ( V_Cont <= (V_SYNC_CYC + V_SYNC_FRONT))); 
 //assign oVGA_H_SYNC =	( ( H_Cont > (H_SYNC_BACK ) )  &&  ( H_Cont <= (H_SYNC_CYC + H_SYNC_BACK)))?0 :1 ; 
 //assign oVGA_V_SYNC =	( ( V_Cont > (V_SYNC_BACK ) )  &&  ( V_Cont <= (V_SYNC_CYC + V_SYNC_BACK)))?0 :1 ; 
 
@@ -77,13 +77,13 @@ assign oVGA_V_SYNC =	( ( V_Cont > (V_SYNC_FRONT ) )  &&  ( V_Cont <= (V_SYNC_CYC
 
 assign oRequest    = (  H_Cont >=  X_START+H_MARK  &&  H_Cont< X_START+H_SYNC_ACT +H_MARK 
 							  &&
-							   V_Cont >=  Y_START+V_MARK && V_Cont< Y_START + V_SYNC_ACT + V_MARK)?1:0 ; 
+							   V_Cont >=  Y_START+V_MARK && V_Cont< Y_START + V_SYNC_ACT + V_MARK); 
 								  
                   
 assign	oVGA_SYNC =	 1'b0   ;
-assign	oVGA_R	 =	 oVGA_BLANK ?	iRed	   :	0;
-assign	oVGA_G	 =	 oVGA_BLANK ?	iGreen	:	0;
-assign	oVGA_B	 =	 oVGA_BLANK ?	iBlue	   :	0;
+assign	oVGA_R	 =	 oVGA_BLANK ?	iRed	   :	8'd0;
+assign	oVGA_G	 =	 oVGA_BLANK ?	iGreen	:	8'd0;
+assign	oVGA_B	 =	 oVGA_BLANK ?	iBlue	   :	8'd0;
 								  								  
 endmodule
 

@@ -18,7 +18,7 @@ module I2C_READ_DATA (
 );
 
 
-reg    [7:0]DELY ;    //ST DELAY
+reg [7:0] DELY;    //ST DELAY
 //wire   [7:0]END_BYTE ; 
 //assign      END_BYTE =1;
 
@@ -50,7 +50,7 @@ else
 	    1: begin  //start 
 		      ST <=2 ; 
 			   { SDAO,  SCLO } <= 2'b01; 
-				A <= {SLAVE_ADDRESS | 1  ,1'b1 };//READ COMMAND
+				A <= {SLAVE_ADDRESS[0], 1'b1};//READ COMMAND
 		    end
 	    2: begin  //start 
 		      ST <=3 ; 
@@ -64,7 +64,7 @@ else
 	    4: begin
 		      ST <=5 ; 
 			   SCLO <= 1'b1 ; 
-				CNT <= CNT +1 ;
+				CNT <= CNT + 8'd1;
 		    end
 			 
 	    5: begin  
@@ -87,10 +87,10 @@ else
 				DELY <=0;
 			   SCLO <= 1'b1 ; 
 				    if ( CNT !=8  ) DATA16 <= { DATA16[14:0], SDAI };
-				   CNT <= CNT +1 ;
+				   CNT <= CNT + 8'd1;
 		    end			 
 	    8: begin  		 
-		    DELY <=DELY+1 ;
+		    DELY <= DELY + 8'd1;
 			 SCLO <= 1'b0 ; 
 			 if (DELY ==2)  begin 			    
 			    if (CNT ==8) begin
@@ -101,7 +101,7 @@ else
 				 end
 			    else if (CNT == 9)  
 				    begin 
-					   BYTE <= BYTE +1 ;   ST <= 9; 
+					   BYTE <= BYTE + 8'd1 ;   ST <= 9; 
 					 end
 				 else ST <= 7;
 			 end	 
@@ -136,10 +136,6 @@ else
 		//--- END ---
 		30: begin
             if (!GO) ST  <=31;
-          end
-		//--- END ---
-		  30: begin
-            if (!GO) ST  <=31;
           end			
 		  31: begin  //
 		      END_OK<=0;
@@ -165,7 +161,7 @@ else
 	    34: begin  //start 
 		      ST <=35 ; 
 			   SCLO <= 1'b1 ; 
-				CNT <= CNT +1 ;
+				CNT <= CNT + 8'd1;
 		    end
 			 
 	    35: begin  
@@ -175,7 +171,7 @@ else
 		    end	
  			 
 	    36: begin  
-		         DELY<=DELY+1;
+		         DELY <= DELY + 8'd1;
 				   if ( DELY > 1 )  begin 
 				         if ( SDAI==1 ) begin ST <= 31 ;  { SDAO,  SCLO } <= 2'b11; end
 			            else  begin ST <=1 ;SCLO <= 1'b0;  end 

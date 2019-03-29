@@ -28,12 +28,12 @@ always @( posedge CLK  ) begin
 	      { H_CNT ,H_CEN } <= {16'h0, H_CNT  }; 
 	 end
 	 //else if ( HS ) H_CNT <=H_CNT+1 ; 
-	 else if ( DE ) H_CNT <=H_CNT+1 ; 
+	 else if (DE) H_CNT <= H_CNT + 16'd1; 
 	 //--V
 	 if (!rVS &&  VS  ) begin  
 	      { V_CNT , V_CEN} <= {16'h0 ,  V_CNT }; 
 	 end
-	 else if ((!rHS &&  HS  ) && (VS) )  V_CNT <=V_CNT+1 ; 
+	 else if ((!rHS && HS) && (VS)) V_CNT <= V_CNT + 16'd1; 
 	
 	//--- H TRIGGER ---
 	LINE  <= (
@@ -41,14 +41,13 @@ always @( posedge CLK  ) begin
 	 (( V_CNT == ( V_CEN/2 +V_OFF/2)  ) && ( H_CNT >= ( H_CEN/2 -H_OFF/2)  )  &&  ( H_CNT < ( H_CEN/2 +H_OFF/2)  )) ||
 	 (( H_CNT == ( H_CEN/2 -H_OFF/2)  ) && ( V_CNT >= ( V_CEN/2 -V_OFF/2)  )  &&  ( V_CNT < ( V_CEN/2 +V_OFF/2)  )) ||
 	 (( H_CNT == ( H_CEN/2 +H_OFF/2)  ) && ( V_CNT >= ( V_CEN/2 -V_OFF/2)  )  &&  ( V_CNT < ( V_CEN/2 +V_OFF/2)  ))
-	 ) ?
-	 1:0 ; 
+	 ); 
 	//--- V TRIGGER ---	
 	ACTIV_C <= ( 
 	  (( H_CNT >= ( H_CEN/2 -H_OFF/2)  ) &&  ( H_CNT < ( H_CEN/2 +H_OFF/2)  ))
 	   &&
 	  (( V_CNT >= ( V_CEN/2 -V_OFF/2)  ) &&  ( V_CNT < ( V_CEN/2 +V_OFF/2)  ))
-	  )?1:0; 
+	  ); 
 end
 
 

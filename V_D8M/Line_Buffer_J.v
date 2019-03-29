@@ -39,28 +39,28 @@ else  begin
    pre_CCD_LVAL <= mCCD_LVAL  ; 
    if ( pre_CCD_LVAL &&  !mCCD_LVAL   )  begin 
       if ( WR >= 2) WR<=0; 
-      else   WR<= WR +1 ; 	
+      else   WR <= WR + 2'd1; 	
 	end 	
 end 		
 	
 //----3 SRAM BUFFER  WRITE ENABLE  -----	
-assign WR0 = ( WR==0)?1:0 ;  
-assign WR1 = ( WR==1)?1:0 ;  
-assign WR2 = ( WR==2)?1:0 ;  
+assign WR0 = (WR == 0);  
+assign WR1 = (WR == 1);  
+assign WR2 = (WR == 2);  
 
 //--- OUT0  SELECTION--- 
 assign taps0x = READ_Request ? (  (
-   ( WR==0)? T1: (  
-   ( WR==1)? T2: (  
-   ( WR==2)? T0: T0 
-	)))) :0 ;
+   (WR==0)? T1: (  
+   (WR==1)? T2: (  
+   (WR==2)? T0: T0 
+	)))) : 10'd0 ;
 	
 //--- OUT1  SELECTION--- 
 assign taps1x = READ_Request ? (  (
    ( WR==0)? T2: (  
    ( WR==1)? T0: (  
    ( WR==2)? T1: T1
-	))))  :0 ;
+	))))  : 10'd0;
 //
 //always @( posedge VGA_CLK ) begin   
 //taps0x <= READ_Request ? (  (

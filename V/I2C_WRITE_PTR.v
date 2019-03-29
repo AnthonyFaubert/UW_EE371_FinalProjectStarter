@@ -58,7 +58,7 @@ else
 	    4: begin  //start 
 		      ST <=5 ; 
 			   SCLO <= 1'b1 ; 
-				CNT <= CNT +1 ;
+				CNT <= CNT + 8'd1;
 		    end
 			 
 	    5: begin  
@@ -122,7 +122,7 @@ else
 	    14: begin  //start 
 		      ST <=15 ; 
 			   SCLO <= 1'b1 ; 
-				CNT <= CNT +1 ;
+				CNT <= CNT + 8'd1;
 		    end
 			 
 	    15: begin  
@@ -132,7 +132,7 @@ else
 		    end	
  			 
 	    16: begin  
-		         DELY<=DELY+1;
+		         DELY <= DELY + 8'd1;
 				   if ( DELY > 1 )  begin 
 				         if ( SDAI==1 ) begin ST <=  17 ; //{ SDAO,  SCLO } <= 2'b11; 
 							end
@@ -157,7 +157,7 @@ else
 				 DELY<=0;
          end 
 	    20: begin  
-		          DELY<=DELY+1;
+		          DELY <= DELY + 8'd1;
 				     if ( DELY > 2 )  ST <=11 ;
 				end 				
 				

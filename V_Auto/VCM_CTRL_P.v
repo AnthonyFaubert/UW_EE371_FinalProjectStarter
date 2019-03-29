@@ -50,7 +50,7 @@ assign TR  =  (SW_FUC_ALL_CEN)? ACTIV_C : ACTIV_V  ;
 always @( posedge VIDEO_CLK ) begin
      { rY2, rY1}  <= { rY1 ,Y1 }  ;
 	   rVS  <= VS ; 
-      S    <= ( SS > TH  )? 8'hff: 0 ;  		
+      S    <= (SS > TH) ? 8'hff : 8'd0;  		
 		//--DIFF Y1-Y2-Y3 
       if ( Y1 >rY2 ) SS<= (Y1 - rY2 ) ; 
                 else SS <= (rY2 - Y1 ) ;

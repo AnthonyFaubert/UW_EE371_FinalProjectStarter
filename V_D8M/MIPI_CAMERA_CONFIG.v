@@ -9,7 +9,7 @@ module MIPI_CAMERA_CONFIG  (
 	
 //----Test or ST-BUS --- 
    output reg [7:0] ID1  ,
-   output reg [7:0] ID2  ,
+//   output reg [7:0] ID2  ,
 //test
 	output           CLK_400K ,
    output reg       I2C_LO0P,
@@ -28,7 +28,7 @@ module MIPI_CAMERA_CONFIG  (
 	output [7:0]     WORD_BYTE	,
    output [15:0]    R_DATA,
 	output           SDAI_W ,
-	output           TR ,
+//	output           TR ,
 	output           I2C_SCL_O ,
    output reg       MIPI_CAMERA_RELAESE  
 	);
@@ -125,7 +125,7 @@ case (ST)
 9: begin 
    if  ( R_END ) begin 
 	       if ( CNT==0 )  ID1    <= R_DATA[7:0] ; 
-	  CNT<=CNT+1 ;
+	  CNT<=CNT+8'd1 ;
 	  ST<=10 ; 	
 	end 
   end	
@@ -171,7 +171,7 @@ end
 	end       	
 34: begin 
      if  ( W_WORD_END )  begin 	
-			 WCNT<=WCNT+1 ;			 
+			 WCNT<=WCNT+16'd1 ;			 
 			 ST<=35 ; 
 	  end
 	end              
@@ -198,7 +198,7 @@ end
 41: begin 
     if ( DELY == SLV8_REG16_DATA8[7:0] * 1   )   begin 
 	  ST<=42; 
-	  WCNT <=WCNT+1 ; 
+	  WCNT <=WCNT+16'd1 ; 
 	 end  
 	 else  DELY <=DELY +1;	
 end 	 
@@ -223,7 +223,7 @@ wire   SDAO;
 assign I2C_SCL_O = ( W_WORD_SCL  & W_POINTER_SCL & R_SCL ) || ( RESET_N==0 )  ;
 assign SDAO      = ( W_POINTER_SDAO & R_SDAO  & W_WORD_SDAO ) ||  ( RESET_N==0 )  ;
 assign I2C_SDA   = (  SDAO  )?1'bz :const_zero_sig;//1'b0 ; 
-assign I2C_SCL   = (ST==0)?0: ( ( I2C_SCL_O )? 1'b1:1'b0 )  ;
+assign I2C_SCL   = (ST == 0) ? 1'b0 : I2C_SCL_O;
 //==== I2C WRITE WORD ===
 wire   W_WORD_SCL ; 
 wire   W_WORD_SDAO ;  
