@@ -18,10 +18,10 @@ module DE1_SOC_D8M_RTL(
 
 	//////////// Audio //////////
 	input 		          		AUD_ADCDAT,
-	inout 		          		AUD_ADCLRCK,
-	inout 		          		AUD_BCLK,
+	input 		          		AUD_ADCLRCK,
+	input 		          		AUD_BCLK,
 	output		          		AUD_DACDAT,
-	inout 		          		AUD_DACLRCK,
+	input 		          		AUD_DACLRCK,
 	output		          		AUD_XCK,
 
 	//////////// CLOCK //////////
