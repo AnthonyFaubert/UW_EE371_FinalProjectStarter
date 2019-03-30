@@ -261,42 +261,50 @@ sdram_pll u6(
 		               .c1    ( DRAM_CLK ),       //100MHZ   -90 degree
 		               .c0    ( SDRAM_CTRL_CLK )  //100MHZ     0 degree 							
 		              
-	               );		
-						
-//------SDRAM CONTROLLER --
-Sdram_Control	   u7	(	//	HOST Side						
-						   .RESET_N     ( KEY[2] ),
-							.CLK         ( SDRAM_CTRL_CLK ) , 
-							//	FIFO Write Side 1
-							.WR1_DATA    ( LUT_MIPI_PIXEL_D[9:0] ),
-							.WR1         ( LUT_MIPI_PIXEL_HS & LUT_MIPI_PIXEL_VS ) ,
-							
-							.WR1_ADDR    ( 0 ),
-                     .WR1_MAX_ADDR( 640*480 ),
-						   .WR1_LENGTH  ( 256 ) , 
-		               .WR1_LOAD    ( !DLY_RST_0 ),
-							.WR1_CLK     ( MIPI_PIXEL_CLK_),
+	               );
 
-                     //	FIFO Read Side 1
-						   .RD1_DATA    ( SDRAM_RD_DATA[9:0] ),
-				        	.RD1         ( READ_Request ),
-				        	.RD1_ADDR    (0 ),
-                     .RD1_MAX_ADDR( 640*480 ),
-							.RD1_LENGTH  ( 256  ),
-							.RD1_LOAD    ( !DLY_RST_1 ),
-							.RD1_CLK     ( VGA_CLK ),
-											
-							//	SDRAM Side
-						   .SA          ( DRAM_ADDR ),
-							.BA          ( DRAM_BA ),
-							.CS_N        ( DRAM_CS_N ),
-							.CKE         ( DRAM_CKE ),
-							.RAS_N       ( DRAM_RAS_N ),
-							.CAS_N       ( DRAM_CAS_N ),
-							.WE_N        ( DRAM_WE_N ),
-							.DQ          ( DRAM_DQ ),
-							.DQM         () // ( DRAM_DQM  )
-						   );	 	 
+   // Determine current camera pixel coordinates
+   logic cameraPixelIsValid;
+   logic [18:0] cameraPixelAddress;
+   CameraCoordTracker camTracker (
+				  .clk(MIPI_PIXEL_CLK_), .arst(~DLY_RST_0),
+				  .hsync_n(MIPI_PIXEL_HS), .vsync_n(MIPI_PIXEL_VS),
+				  .pixelValid(cameraPixelIsValid),
+				  .pixelAddress(cameraPixelAddress), .x(), .y()
+				  );
+
+
+   SDRAM_Ports sdramPorts (
+			   .clk(clockSDRAM), .rst(~DLY_RST_0),
+			   // Port C: camera write port
+			   .portC_clk(MIPI_PIXEL_CLK_),
+			   .portC_aclr(~DLY_RST_0),
+			   .portC_write(cameraPixelIsValid),
+			   .portC_addr({6'd0, cameraPixelAddress}),
+			   .portC_din(MIPI_PIXEL_D),
+
+			   // Port V: VGA read port
+			   .portV_clk(VGA_CLK),
+			   // Automatic read requesting
+			   .portV_arst(~DLY_RST_1), // auto read requester async reset
+			   .portV_readOffset(25'd0),
+			   .portV_nextDout(READ_Request),
+			   .portV_dout(SDRAM_RD_DATA[9:0]),
+
+			   // Add your own custom ports
+
+
+			   // SDRAM connections
+			   .DRAM_DQ, .DRAM_ADDR, .DRAM_BA, .DRAM_CAS_N, .DRAM_CKE,
+			   .DRAM_CLK, .DRAM_CS_N, .DRAM_LDQM, .DRAM_RAS_N, .DRAM_UDQM, .DRAM_WE_N
+			   );
+   
+
+
+   // Create a reset signal that's true for one clock cycle after the FPGA boots and stays off forever afterwards
+   logic SDRAM_ControllerReset = 1;
+   always_ff @(posedge clk125) SDRAM_ControllerReset <= 0;
+   
 	 
 //------ CMOS CCD_DATA TO RGB_DATA -- 
 
