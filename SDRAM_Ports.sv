@@ -38,21 +38,29 @@ module SDRAM_Ports (
    // Camera->SDRAM write data FIFO
    logic 	      rdPortC, PortCempty, PortCthreshold;
    logic [7:0] 	      PortCusedw;
-   logic [34:0]       PortCdata;
+   logic [9:0] 	      PortCword;
+   logic [24:0]       PortCaddr;
+   logic [41:0]       PortCcmd;
    FIFO_PortC portCFIFO (
 			 .aclr(portC_aclr),
 			 .wrclk(portC_clk), .wrreq(portC_write), .data({portC_addr, portC_din}),
 			 
-			 .rdclk(clk), .rdreq(rdPortC), .rdempty(PortCempty), .rdusedw(PortCusedw), .q(PortCdata)
+			 .rdclk(clk), .rdreq(rdPortC), .rdempty(PortCempty), .rdusedw(PortCusedw), .q({PortCaddr, PortCword})
 			 );
+   assign PortCcmd = {1'b1, // PortC always writes
+		       PortCaddr,
+		       6'd0, PortCword // only 10 bits of useful data to write
+		       };
    // Urgently flush PortC when the FIFO is nearing full
    assign PortCthreshold = (PortCusedw > 8'd200);
 
    // cmdb: command buffer
-   logic 	      cmdSend, cmdbFull;
+   logic 	      cmdSend, cmdbFull, lastCmdWasWrite, nlastCmdWasWrite;
    logic [7:0] 	      cmdbUsedw;
-   logic [41:0]       command; // {1'write/read, 25'address, 16'data}
    logic [9:0] 	      refreshCountdown;
+   
+   // write: {1'b1, 25'address, 16'data}, read: {1'b0, 25'address, 16'dontcare}
+   logic [41:0]       command;
    
    logic [14:0]       presentRow, nextRow;
    always_comb begin
@@ -63,42 +71,78 @@ module SDRAM_Ports (
       rdPortV = 0;
       rdPort0 = 0;
       nextRow = presentRow;
+      nlastCmdWasWrite = lastCmdWasWrite;
       
       // Can't issue any commands if the command buffer is full
       if (~cmdbFull) begin
+	 // Do the following behaviors in order of priority if their conditions are met:
+	 // 0: do Port0 commands to prevent it from filling
+	 // 1: do PortV commands to prevent it from emptying
+	 // 2: do PortC commands to prevent it from filling
+	 // 3: continue writing. do a write from Port0 on the present row
+	 // 4: continue writing. do a write from PortC on the present row
+	 // 5: do a read from PortV on the present row
+	 // 6: do a read from Port0 on the present row
+	 // 7: do a write from Port0 on a new row
+	 // 8: do a write from PortC on a new row
+	 // 9: do a  read from PortV on a new row
+	 //10: do a  read from Port0 on a new row
+	 //11: idle
+
 	 if (Port0threshold) begin
-	    // Don't let Port0 fill up
+	    // Don't let Port0 fill
 	    cmdSend = 1;
 	    rdPort0 = 1;
-	    command = 'X; // TODO
+	    command = Port0cmd;
+	 end else if (PortVthreshold) begin
+	    // Don't let PortV empty
+	    cmdSend = 1;
+	    rdPortV = 1;
+	    command = PortVcmd;
 	 end else if (PortCthreshold) begin
-	    // Don't let PortC fill up
+	    // Don't let PortC fill
 	    cmdSend = 1;
 	    rdPortC = 1;
-	    command = {1'b1, // PortC always writes
-		       PortCdata[34:10],
-		       6'd0, PortCdata[9:0] // only 10 bits of useful data to write
-		       };
+	    command = PortCcmd;
+	 end else if (lastCmdWasWrite & ~Port0empty & Port0cmd[41] & (Port0cmd[40:26] == presentRow)) begin
+	    // Write from Port0
+	    cmdSend = 1;
+	    rdPort0 = 1;
+	    command = Port0cmd;
+	 end else if (lastCmdWasWrite & ~PortCempty & (PortCcmd[40:26] == presentRow)) begin
+	    // Write from PortC
+	    cmdSend = 1;
+	    rdPortC = 1;
+	    command = PortCcmd;
+	 end else if (~PortVempty & (PortVcmd[40:26] == presentRow)) begin
+
+	 end else if (~Port0empty & ~Port0cmd[41] & (Port0cmd[40:26] == presentRow)) begin
+	 end else if (~Port0empty & ) begin
+	    end else if (~Port0empty 
 	 end else begin
-	    // Do normal stuff
-	    if (PortCdata[34:11] == presentRow) begin
-	       // Write PortC's data
+	    
+	    end else if ((PortCdata[34:11] == presentRow) & ~PortCempty) begin
+	       // Write from PortC
 	       cmdSend = 1;
 	       rdPortC = 1;
-	       command = {1'b1, // PortC always writes
+	       command = {1'b1,
 			  PortCdata[34:10],
 			  6'd0, PortCdata[9:0] // only 10 bits of useful data to write
 			  };
-	       
+	    end else begin
+	       if (Port0
 	    end // else we're idle
+
+		   // If we sent a command, record whether it was a read or write
+		   if (cmdSend) nlastCmdWasWrite = command[41];
 	 end
       end
    end
    always_ff @(posedge clk) begin
       if (rst) begin
-	 
+		   lastCmdWasWrite <= 1;
       end else begin
-	 
+		   lastCmdWasWrite <= nlastCmdWasWrite;
       end
    end
    
