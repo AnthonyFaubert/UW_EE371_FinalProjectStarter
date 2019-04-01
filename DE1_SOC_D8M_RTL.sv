@@ -273,7 +273,7 @@ sdram_pll u6(
 				  .pixelAddress(cameraPixelAddress), .x(), .y()
 				  );
 
-
+   // Instantiates the SDRAM inside a wrapper that multiplexes multiple ports at lower speeds into the SDRAM's single port at high speed
    SDRAM_Ports sdramPorts (
 			   .clk(clockSDRAM), .rst(~DLY_RST_0),
 			   // Port C: camera write port
@@ -291,8 +291,22 @@ sdram_pll u6(
 			   .portV_nextDout(READ_Request),
 			   .portV_dout(SDRAM_RD_DATA[9:0]),
 
-			   // Add your own custom ports
+			   // General-purpose read-write port for you to use
+			   .port0_clk0(), // clock for sending read/write commands to Port0
+			   .port0_aclr0(1'b0), // asynchronous clear for Port0 command FIFO
+			   .port0_addr(), // 25-bit
+			   .port0_wrreq(), // request a write to the specified address
+			   .port0_din(), // data to write, 16-bit
+			   .port0_rdreq(), // request a read from the specified address
+			   .port0_full(), // true/1'b1 if Port0 cannot accept new commands yet
+			   // Port0 readout FIFO (standard, NOT FWFT)
+			   .port0_clk1(), // clock for retreiving read data from Port0 (you'll probably just connect this to the same clock as port0_clk0)
+			   .port0_aclr1(1'b0), // asynchronous clear for Port0 readout FIFO
+			   .port0_empty(), // true/1'b1 if no new read data
+			   .port0_read(), // get a new readout from port0_dout
+			   .port0_dout() // read data output in the format {25'address, 16'data}
 
+			   // Add your own custom ports, or share Port0
 
 			   // SDRAM connections
 			   .DRAM_DQ, .DRAM_ADDR, .DRAM_BA, .DRAM_CAS_N, .DRAM_CKE,
