@@ -72,7 +72,7 @@ module SDRAM_Ports (
    logic [41:0]       Port0cmd;
    FIFO_Port0cmd port0FIFOcmd (
 			 .aclr(port0_aclr0),
-			 .wrclk(port0_clk0), .wrreq(port0_rdreq | port0_wrreq), .data({port0_wrreq, port0_addr, port0_din}),
+			 .wrclk(port0_clk0), .wrreq(port0_rdreq | port0_wrreq), .wrfull(port0_full), .data({port0_wrreq, port0_addr, port0_din}),
 			 
 			 .rdclk(clk), .rdreq(rdPort0), .rdempty(Port0empty), .rdusedw(Port0usedw), .q(Port0cmd)
 			 );
@@ -96,12 +96,13 @@ module SDRAM_Ports (
    assign PortVthreshold = (PortVusedw > 8'd200);
    // Automated address generation for PortV
    logic [8:0] 	PortVout_usedw; // how many words are in the output FIFO
+   // VGA_READ_AHEAD_MARGIN should be adjusted so that emptying the command buffer (cmdbUsedw/2 cycles) plus VGA_READ_AHEAD_MARGIN clock cycles is enough time for a value to be read to prevent the PortV output FIFO from emptying
+   assign PortVwrreq = (PortVout_usedw < ((cmdbUsedw >> 1) + VGA_READ_AHEAD_MARGIN));
    always_ff @(posedge clk, posedge portV_arst) begin
       if (portV_arst) begin
 	 PortVaddr <= '0;
       end else begin
-	 if (PortVout_usedw < ((cmdbUsedw >> 1) + VGA_READ_AHEAD_MARGIN)) begin
-	    // VGA_READ_AHEAD_MARGIN should be adjusted so that emptying the command buffer (cmdbUsedw/2 cycles) plus VGA_READ_AHEAD_MARGIN clock cycles is enough time for a value to be read to prevent the PortV output FIFO from emptying
+	 if (PortVwrreq) begin
 	    // PortVaddr = (PortVaddr + 1) % (640*480)
 	    PortVaddr <= (PortVaddr == 19'd307199) ? '0 : (PortVaddr + 19'd1);
 	 end else begin
@@ -308,11 +309,16 @@ module SDRAM_Ports_tb ();
    
    SDRAM_Ports dut (.*);
 
+   // Setup clocks
    initial begin
       clk = 0;
       forever #8 clk = ~clk; // 125 MHz
+   end
+   initial begin
       portV_clk = 0;
       forever #20 portV_clk = ~portV_clk; // 50 MHz
+   end
+   initial begin
       portC_clk = 0;
       forever #25 portC_clk = ~portC_clk; // 40 MHz
    end
