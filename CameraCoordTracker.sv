@@ -9,7 +9,7 @@ module CameraCoordTracker (
          output logic [9:0] x, y // 2^10 > 640
       );
    // pixel invalid during horizontal or vertical sync
-   assign pixelValid = hsync & vsync;
+   assign pixelValid = hsync_n & vsync_n;
 
    logic endFrame;
    assign endFrame = (pixelAddress == 307199);
@@ -18,7 +18,7 @@ module CameraCoordTracker (
       if (arst) begin
 	 {pixelAddress, x, y} <= '0;
       end else begin
-	 if (enable) begin
+	 if (pixelValid) begin
 	    // pixelAddress = (pixelAddress + 1) % (640*480)
 	    pixelAddress <= endFrame ? 19'd0 : (pixelAddress + 19'd1);
 	    // x = (x + 1) % 640

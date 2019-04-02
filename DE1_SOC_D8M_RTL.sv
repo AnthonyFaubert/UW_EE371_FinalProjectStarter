@@ -188,6 +188,8 @@ wire        LUT_MIPI_PIXEL_VS;
 wire [9:0]  LUT_MIPI_PIXEL_D  ;
 wire        MIPI_PIXEL_CLK_; 
 wire [9:0]  PCK;
+
+logic clk125; // 125 MHz clock for SDRAM
 //=======================================================
 // Structural coding
 //=======================================================
@@ -221,8 +223,8 @@ assign CAMERA_I2C_SCL =( I2C_RELEASE  )?  CAMERA_I2C_SCL_AF  : CAMERA_I2C_SCL_MI
 PLL_GenClocks clockGenerator (
       .refclk(CLOCK_50), .rst(0), // Configured the PLL to have an automatic self-reset
       .outclk_0(MIPI_REFCLK), // MIPI / VGA REF CLOCK, 20 MHz
-      .outclk_1(VGA_CLK), // MIPI / VGA REF CLOCK 25 MHz
-      .outclk_2(clk125), // 125 MHz
+      .outclk_1(VGA_CLK), // MIPI / VGA REF CLOCK, 25 MHz
+      .outclk_2(clk125), // SDRAM controller clock, 125 MHz
       .locked() // true if the PLL has acquired (locked onto) the reference clock
    );
    
