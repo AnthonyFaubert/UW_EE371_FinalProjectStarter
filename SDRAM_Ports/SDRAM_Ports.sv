@@ -1,5 +1,6 @@
 // Author: Anthony Faubert (deadbeef@uw.edu)
 
+`timescale 1 ns / 1 ps
 
 // Provides read and write ports for the SDRAM to the rest of the project
 module SDRAM_Ports (
@@ -13,10 +14,10 @@ module SDRAM_Ports (
          // Port V: VGA read port
          input logic portV_clk, portV_arst, portV_nextDout,
          input logic [24:0] portV_readOffset,
-         output logic [9:0] portV_dout,
+         output logic [15:0] portV_dout,
 
          // Port 0: General-purpose read/write port
-         input logic port0_clk0, port0_aclr0, port0_clk0, port0_aclr0, port0_wrreq, port0_rdreq, port0_read,
+         input logic port0_clk0, port0_aclr0, port0_clk1, port0_aclr1, port0_wrreq, port0_rdreq, port0_read,
          output logic port0_full, port0_empty,
          input logic [24:0] port0_addr,
          input logic [15:0] port0_din,
@@ -82,7 +83,7 @@ module SDRAM_Ports (
    // SDRAM->VGA read command FIFO, automatically driven
    logic 	      rdPortV, PortVempty, PortVthreshold, PortVwrreq;
    logic [7:0] 	      PortVusedw;
-   logic [24:0]       PortVaddr;
+   logic [18:0]       PortVaddr; // 2^19 > 640*480
    logic [41:0]       PortVcmd;
    FIFO_PortVcmd portVFIFOcmd (
 			 .aclr(portV_arst), .clock(clk),
@@ -94,7 +95,6 @@ module SDRAM_Ports (
    // Urgently flush PortV when the FIFO is nearing full
    assign PortVthreshold = (PortVusedw > 8'd200);
    // Automated address generation for PortV
-   logic [18:0]       PortVaddr; // 2^19 > 640*480
    logic [8:0] 	PortVout_usedw; // how many words are in the output FIFO
    always_ff @(posedge clk, posedge portV_arst) begin
       if (portV_arst) begin
@@ -210,7 +210,7 @@ module SDRAM_Ports (
 
 	 // If we sent a command, record whether it was a read or write
 	 if (cmdSend) nlastCmdWasWrite = command[41];
-	 end
+	 else nlastCmdWasWrite = lastCmdWasWrite;
       end
    end
    always_ff @(posedge clk) begin
@@ -294,11 +294,11 @@ module SDRAM_Ports_tb ();
    logic clk, rst,
 	 portC_clk, portC_aclr, portC_write,
 	 portV_clk, portV_arst, portV_nextDout,
-	 port0_clk0, port0_aclr0, port0_clk0, port0_aclr0, port0_wrreq, port0_rdreq,
+	 port0_clk0, port0_aclr0, port0_clk1, port0_aclr1, port0_wrreq, port0_rdreq,
 	 port0_read, port0_full, port0_empty;
    logic [24:0] portC_addr, portV_readOffset, port0_addr;
-   logic [9:0] 	portC_din, portV_dout;
-   logic [15:0] port0_din;
+   logic [9:0] 	portC_din;
+   logic [15:0] port0_din, portV_dout;
    logic [40:0] port0_dout;
 
    tri [15:0] DRAM_DQ;
@@ -325,6 +325,9 @@ module SDRAM_Ports_tb ();
 
       assert(port0_empty);
       assert(^portV_dout !== 1'bX); // portV_dout must be defined by now
+
+      repeat (5000) @(posedge clk);
       
+      $stop;
    end
 endmodule

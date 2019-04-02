@@ -289,7 +289,7 @@ sdram_pll u6(
 			   .portV_arst(~DLY_RST_1), // auto read requester async reset
 			   .portV_readOffset(25'd0),
 			   .portV_nextDout(READ_Request),
-			   .portV_dout(SDRAM_RD_DATA[9:0]),
+			   .portV_dout(SDRAM_RD_DATA), // only [9:0] is actually used
 
 			   // General-purpose read-write port for you to use
 			   .port0_clk0(), // clock for sending read/write commands to Port0
