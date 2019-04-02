@@ -1,7 +1,4 @@
-
-// TODO: delete this note
-// write clk = MIPI_PIXEL_CLK_, wr dat = LUT_MIPI_PIXEL_D[9:0], wren = LUT_MIPI_PIXEL_HS & LUT_MIPI_PIXEL_VS, wr_async_clr = !DLY_RST_0
-// rd clk = VGA_CLK, rd dat = SDRAM_RD_DATA[9:0], rden = READ_Request, rd_async_clr = !DLY_RST_1
+// Author: Anthony Faubert (deadbeef@uw.edu)
 
 
 // Provides read and write ports for the SDRAM to the rest of the project
@@ -41,7 +38,7 @@ module SDRAM_Ports (
          output logic DRAM_UDQM, // Upper DQ Mask, same as LDQM, but for the upper byte (DQ[15:8]) instead of the lower one
          output logic DRAM_WE_N // WriteEnable, active-low
       );
-   localparam VGA_NULL_DATA_COLOR = 24'hEA00FF; // A nice pinkish-purple color
+   localparam VGA_NULL_DATA_COLOR = {6'd0, 10'd500}; // only bottom 10 bits used, the value should result in a gray color
    // If you're having lots of null data color, try increasing this margin
    localparam VGA_READ_AHEAD_MARGIN = 8'd20; // AOI
    
@@ -88,10 +85,9 @@ module SDRAM_Ports (
    logic [24:0]       PortVaddr;
    logic [41:0]       PortVcmd;
    FIFO_PortVcmd portVFIFOcmd (
-			 .aclr(portV_arst),
-			 .wrclk(clk), .wrreq(PortVwrreq), .data({6'd0, PortVaddr} + portV_readOffset),
-			 
-			 .rdclk(clk), .rdreq(rdPortV), .rdempty(PortVempty), .rdusedw(PortVusedw), .q(PortVcmd[40:16])
+			 .aclr(portV_arst), .clock(clk),
+			 .wrreq(PortVwrreq), .data({6'd0, PortVaddr} + portV_readOffset),
+			 .rdreq(rdPortV), .empty(PortVempty), .usedw(PortVusedw), .q(PortVcmd[40:16])
 			 );
    assign PortVcmd[41] = 1'b0; // PortV always reads
    assign PortVcmd[15:0] = 'X;
@@ -99,7 +95,7 @@ module SDRAM_Ports (
    assign PortVthreshold = (PortVusedw > 8'd200);
    // Automated address generation for PortV
    logic [18:0]       PortVaddr; // 2^19 > 640*480
-   logic [7:0] 	PortVout_usedw; // how many words are in the output FIFO
+   logic [8:0] 	PortVout_usedw; // how many words are in the output FIFO
    always_ff @(posedge clk, posedge portV_arst) begin
       if (portV_arst) begin
 	 PortVaddr <= '0;
@@ -261,7 +257,7 @@ module SDRAM_Ports (
 	 PortVout_nullData = 0;
 	 // VGA_addrTracker = (VGA_addrTracker + 1) % (640*480)
 	 nextVGA_addrTracker = (VGA_addrTracker == 19'd307199) ? 19'd0 : (VGA_addrTracker + 19'd1);
-      end else if (PortVout_usedw <= 8'd1) begin
+      end else if (PortVout_usedw <= 9'd1) begin
 	 // Output FIFO might be about to be empty, prevent that from ever happening by writing dummy data
 	 PortVout_wrreq = 1;
 	 PortVout_nullData = 1;
