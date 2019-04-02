@@ -42,6 +42,11 @@ module SDRAM_Ports (
          output logic DRAM_WE_N // WriteEnable, active-low
       );
    localparam VGA_NULL_DATA_COLOR = 24'hEA00FF; // A nice pinkish-purple color
+   // If you're having lots of null data color, try increasing this margin
+   localparam VGA_READ_AHEAD_MARGIN = 8'd20; // AOI
+   
+   logic [7:0] cmdbUsedw; // How full the SDRAM cmd FIFO is (from 0-255)
+   
    
    // Camera->SDRAM write data FIFO
    logic 	      rdPortC, PortCempty, PortCthreshold;
@@ -49,7 +54,7 @@ module SDRAM_Ports (
    logic [9:0] 	      PortCword;
    logic [24:0]       PortCaddr;
    logic [41:0]       PortCcmd;
-   FIFO_PortC portCFIFO (2
+   FIFO_PortC portCFIFO (
 			 .aclr(portC_aclr),
 			 .wrclk(portC_clk), .wrreq(portC_write), .data({portC_addr, portC_din}),
 			 
@@ -67,7 +72,7 @@ module SDRAM_Ports (
    logic 	      rdPort0, Port0empty, Port0threshold;
    logic [7:0] 	      Port0usedw;
    logic [41:0]       Port0cmd;
-   FIFO_Port0 port0FIFO (
+   FIFO_Port0cmd port0FIFOcmd (
 			 .aclr(port0_aclr0),
 			 .wrclk(port0_clk0), .wrreq(port0_rdreq | port0_wrreq), .data({port0_wrreq, port0_addr, port0_din}),
 			 
@@ -82,7 +87,7 @@ module SDRAM_Ports (
    logic [7:0] 	      PortVusedw;
    logic [24:0]       PortVaddr;
    logic [41:0]       PortVcmd;
-   FIFO_PortV portCFIFO (
+   FIFO_PortVcmd portVFIFOcmd (
 			 .aclr(portV_arst),
 			 .wrclk(clk), .wrreq(PortVwrreq), .data({6'd0, PortVaddr} + portV_readOffset),
 			 
@@ -94,11 +99,13 @@ module SDRAM_Ports (
    assign PortVthreshold = (PortVusedw > 8'd200);
    // Automated address generation for PortV
    logic [18:0]       PortVaddr; // 2^19 > 640*480
+   logic [7:0] 	PortVout_usedw; // how many words are in the output FIFO
    always_ff @(posedge clk, posedge portV_arst) begin
       if (portV_arst) begin
 	 PortVaddr <= '0;
       end else begin
-	 if (TODO) begin // only do this if we're running low on data in the PortV readout FIFO, better algorithm?
+	 if (PortVout_usedw < ((cmdbUsedw >> 1) + VGA_READ_AHEAD_MARGIN)) begin
+	    // VGA_READ_AHEAD_MARGIN should be adjusted so that emptying the command buffer (cmdbUsedw/2 cycles) plus VGA_READ_AHEAD_MARGIN clock cycles is enough time for a value to be read to prevent the PortV output FIFO from emptying
 	    // PortVaddr = (PortVaddr + 1) % (640*480)
 	    PortVaddr <= (PortVaddr == 19'd307199) ? '0 : (PortVaddr + 19'd1);
 	 end else begin
@@ -109,7 +116,8 @@ module SDRAM_Ports (
    
    // cmdb: command buffer
    logic 	      cmdSend, cmdbFull, lastCmdWasWrite, nlastCmdWasWrite;
-   logic [7:0] 	      cmdbUsedw;
+   // [7:0] cmdbUsedw defined above
+
    logic [9:0] 	      refreshCountdown;
    
    // write: {1'b1, 25'address, 16'data}, read: {1'b0, 25'address, 16'dontcare}
@@ -235,5 +243,92 @@ module SDRAM_Ports (
       );
 
    // Read filtering should be done here
+
+   // PortV output data FIFO ([7:0] PortVout_wrreq defined near PortV cmd FIFO)
+   logic PortVout_nullData, PortVout_wrreq;
+   FIFO_PortVout portVFIFOout (
+			 .aclr(portV_arst),
+			 .wrclk(clk), .wrreq(PortVout_wrreq), .data(PortVout_nullData ? VGA_NULL_DATA_COLOR : rdata), .wrusedw(PortVout_usedw),
+			 
+			 .rdclk(portV_clk), .rdreq(portV_nextDout), .q(portV_dout)
+			 );
+   // Write the correct rdata to the PortV output FIFO and prevent it from becoming empty with dummy data when necessary
+   logic [18:0] VGA_addrTracker, nextVGA_addrTracker;
+   always_comb begin
+      if ( (raddr == ({6'd0, VGA_addrTracker} + portV_readOffset)) & readValid ) begin
+	 // Readout is valid at the correct VGA_addrTracker in the right order
+	 PortVout_wrreq = 1;
+	 PortVout_nullData = 0;
+	 // VGA_addrTracker = (VGA_addrTracker + 1) % (640*480)
+	 nextVGA_addrTracker = (VGA_addrTracker == 19'd307199) ? 19'd0 : (VGA_addrTracker + 19'd1);
+      end else if (PortVout_usedw <= 8'd1) begin
+	 // Output FIFO might be about to be empty, prevent that from ever happening by writing dummy data
+	 PortVout_wrreq = 1;
+	 PortVout_nullData = 1;
+	 // VGA_addrTracker = (VGA_addrTracker + 1) % (640*480)
+	 nextVGA_addrTracker = (VGA_addrTracker == 19'd307199) ? 19'd0 : (VGA_addrTracker + 19'd1);
+      end else begin
+	 // Do nothing
+	 PortVout_wrreq = 0;
+	 PortVout_nullData = 0;
+	 nextVGA_addrTracker = VGA_addrTracker;
+      end
+   end
+   always_ff @(posedge clk, posedge portV_arst) begin
+      if (portV_arst) VGA_addrTracker <= 0;
+      else VGA_addrTracker <= nextVGA_addrTracker;
+   end
    
+   // Port0 readout FIFO
+   logic Port0filter;
+   FIFO_Port0out port0FIFOout (
+			 .aclr(port0_aclr1),
+			 .wrclk(clk), .wrreq(readValid & Port0filter), .data({raddr, rdata}),
+			 
+			 .rdclk(port0_clk1), .rdreq(port0_read), .rdempty(port0_empty), .q(port0_dout)
+			 );
+   always_comb begin // AOI
+      // Don't spam Port0 with VGA data
+      // Port0filter = 1 iff raddr outside of [offset+640*480 - 1 : offset]
+      Port0filter = (raddr < portV_readOffset) & ((25'd307199 + portV_readOffset) < raddr);
+   end
+endmodule
+
+module SDRAM_Ports_tb ();
+   logic clk, rst,
+	 portC_clk, portC_aclr, portC_write,
+	 portV_clk, portV_arst, portV_nextDout,
+	 port0_clk0, port0_aclr0, port0_clk0, port0_aclr0, port0_wrreq, port0_rdreq,
+	 port0_read, port0_full, port0_empty;
+   logic [24:0] portC_addr, portV_readOffset, port0_addr;
+   logic [9:0] 	portC_din, portV_dout;
+   logic [15:0] port0_din;
+   logic [40:0] port0_dout;
+
+   tri [15:0] DRAM_DQ;
+   logic [12:0] DRAM_ADDR;
+   logic [1:0] DRAM_BA;
+   logic DRAM_CAS_N, DRAM_CKE, DRAM_CLK, DRAM_CS_N, DRAM_LDQM, DRAM_RAS_N, DRAM_UDQM, DRAM_WE_N;
+   
+   SDRAM_Ports dut (.*);
+
+   initial begin
+      clk = 0;
+      forever #8 clk = ~clk; // 125 MHz
+      portV_clk = 0;
+      forever #20 portV_clk = ~portV_clk; // 50 MHz
+      portC_clk = 0;
+      forever #25 portC_clk = ~portC_clk; // 40 MHz
+   end
+   assign {port0_clk0, port0_clk1} = {2{portV_clk}};
+
+   initial begin
+      {portC_write, portV_nextDout, port0_wrreq, port0_rdreq, port0_read, portC_addr, portV_readOffset, port0_addr, portC_din, port0_din} = '0;
+      {rst, portC_aclr, portV_arst, port0_aclr0, port0_aclr1} = '1; #30;
+      {rst, portC_aclr, portV_arst, port0_aclr0, port0_aclr1} = '0; #30;
+
+      assert(port0_empty);
+      assert(^portV_dout !== 1'bX); // portV_dout must be defined by now
+      
+   end
 endmodule
