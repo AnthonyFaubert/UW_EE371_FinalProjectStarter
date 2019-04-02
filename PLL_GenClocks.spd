@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simPackage>
+ <file path="PLL_GenClocks_sim/PLL_GenClocks.vo" type="VERILOG" />
+ <topLevel name="PLL_GenClocks" />
+ <deviceFamily name="cyclonev" />
+</simPackage>

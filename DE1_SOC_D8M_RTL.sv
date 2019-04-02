@@ -216,17 +216,26 @@ assign MIPI_RESET_n   = RESET_N ;
 //------ CAMERA MODULE I2C SWITCH  --
 assign I2C_RELEASE    = CAMERA_MIPI_RELAESE & MIPI_BRIDGE_RELEASE; 
 assign CAMERA_I2C_SCL =( I2C_RELEASE  )?  CAMERA_I2C_SCL_AF  : CAMERA_I2C_SCL_MIPI ;   
- 
+
+//------ CLOCK GENERATOR --
+PLL_GenClocks clockGenerator (
+      .refclk(CLOCK_50), .rst(0), // Configured the PLL to have an automatic self-reset
+      .outclk_0(MIPI_REFCLK), // MIPI / VGA REF CLOCK, 20 MHz
+      .outclk_1(VGA_CLK), // MIPI / VGA REF CLOCK 25 MHz
+      .outclk_2(clk125), // 125 MHz
+      .locked() // true if the PLL has acquired (locked onto) the reference clock
+   );
+   
+   
 //----- RESET RELAY  --		
-RESET_DELAY			u2	(	
-							.iRST  ( KEY[2] ),
-                     .iCLK  ( CLOCK2_50 ),
-							.oRST_0( DLY_RST_0 ),
-							.oRST_1( DLY_RST_1 ),
-							.oRST_2( DLY_RST_2 ),					
-						   .oREADY( RESET_N)  
-							
-						);
+RESET_DELAY u2 (	
+      .iRST  ( KEY[2] ),
+      .iCLK  ( CLOCK2_50 ),
+      .oRST_0( DLY_RST_0 ),
+      .oRST_1( DLY_RST_1 ),
+      .oRST_2( DLY_RST_2 ),					
+      .oREADY( RESET_N)  
+   );
  
 //------ MIPI BRIGE & CAMERA SETTING  --  
 MIPI_BRIDGE_CAMERA_Config    cfin(
@@ -240,29 +249,7 @@ MIPI_BRIDGE_CAMERA_Config    cfin(
                       .CAMERA_I2C_RELAESE( CAMERA_MIPI_RELAESE )
              );
 				 
-//------MIPI / VGA REF CLOCK  --
-pll_test pll_ref(
-	                   .inclk0 ( CLOCK3_50 ),
-	                   .areset ( ~KEY[2]   ),
-	                   .c0( MIPI_REFCLK    ) //20Mhz
-
-    );
-	 
-//------MIPI / VGA REF CLOCK  -
-VIDEO_PLL pll_ref1(
-	                   .inclk0 ( CLOCK2_50 ),
-	                   .areset ( ~KEY[2] ),
-	                   .c0( VGA_CLK )        //25 Mhz	
-    );	 
-//------SDRAM CLOCK GENNERATER  --
-sdram_pll u6(
-		               .areset( 0 ) ,     
-		               .inclk0( CLOCK_50 ),              
-		               .c1    ( DRAM_CLK ),       //100MHZ   -90 degree
-		               .c0    ( SDRAM_CTRL_CLK )  //100MHZ     0 degree 							
-		              
-	               );
-
+//------ CAMERA COORDINATE TRACKER --
    // Determine current camera pixel coordinates
    logic cameraPixelIsValid;
    logic [18:0] cameraPixelAddress;
@@ -273,6 +260,7 @@ sdram_pll u6(
 				  .pixelAddress(cameraPixelAddress), .x(), .y()
 				  );
 
+//------ SDRAM CONTROLLER AND PORT WRAPPER --
    // Instantiates the SDRAM inside a wrapper that multiplexes multiple ports at lower speeds into the SDRAM's single port at high speed
    SDRAM_Ports sdramPorts (
 			   .clk(clockSDRAM), .rst(~DLY_RST_0),
@@ -304,7 +292,7 @@ sdram_pll u6(
 			   .port0_aclr1(1'b0), // asynchronous clear for Port0 readout FIFO
 			   .port0_empty(), // true/1'b1 if no new read data
 			   .port0_read(), // get a new readout from port0_dout
-			   .port0_dout() // read data output in the format {25'address, 16'data}
+			   .port0_dout(), // read data output in the format {25'address, 16'data}
 
 			   // Add your own custom ports, or share Port0
 
@@ -316,8 +304,8 @@ sdram_pll u6(
 
 
    // Create a reset signal that's true for one clock cycle after the FPGA boots and stays off forever afterwards
-   logic SDRAM_ControllerReset = 1;
-   always_ff @(posedge clk125) SDRAM_ControllerReset <= 0;
+   //logic SDRAM_ControllerReset = 1;
+   //always_ff @(posedge clk125) SDRAM_ControllerReset <= 0;
    
 	 
 //------ CMOS CCD_DATA TO RGB_DATA -- 
