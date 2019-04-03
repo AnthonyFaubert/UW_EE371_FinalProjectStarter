@@ -14,6 +14,7 @@ module SDRAM_Ports (
          // Port V: VGA read port
          input logic portV_clk, portV_arst, portV_nextDout,
          input logic [24:0] portV_readOffset,
+         input logic [9:0] portV_VGAx, portV_VGAy, // VGA is 800x525 with 640x480 of that being visible, 2^10 > 800
          output logic [15:0] portV_dout,
 
          // Port 0: General-purpose read/write port
@@ -41,7 +42,8 @@ module SDRAM_Ports (
       );
    localparam VGA_NULL_DATA_COLOR = {6'd0, 10'd500}; // only bottom 10 bits used, the value should result in a gray color
    // If you're having lots of null data color, try increasing this margin
-   localparam VGA_READ_AHEAD_MARGIN = 8'd20; // AOI
+   // WARNING: do not set to 216832 or higher! (2^19 - 640*480 - 256 (size of cmdb))
+   localparam VGA_READ_AHEAD_MARGIN = 19'd50; // AOI
    
    logic [7:0] cmdbUsedw; // How full the SDRAM cmd FIFO is (from 0-255)
    
@@ -79,38 +81,51 @@ module SDRAM_Ports (
    // Urgently flush Port0 when the FIFO is nearing full
    assign Port0threshold = (Port0usedw > 8'd200);
 
+   
+   // portV_clk domain -> clk domain syncronizers so we can use VGA x,y and portV_readOffset in the SDRAM clock domain
+   logic [24:0] readOffset, readOffsetMS;
+   logic [9:0] 	VGAx, VGAxMS, VGAy, VGAyMS;
+   always_ff @(posedge clk) begin
+      {readOffset, readOffsetMS} <= {readOffsetMS, portV_readOffset};
+      {VGAx, VGAxMS} <= {VGAxMS, portV_VGAx};
+      {VGAy, VGAyMS} <= {VGAyMS, portV_VGAy};
+   end
 
-   // SDRAM->VGA read command FIFO, automatically driven
-   logic 	      rdPortV, PortVempty, PortVthreshold, PortVwrreq;
-   logic [7:0] 	      PortVusedw;
-   logic [18:0]       PortVaddr; // 2^19 > 640*480
-   logic [41:0]       PortVcmd;
-   FIFO_PortVcmd portVFIFOcmd (
-			 .aclr(portV_arst), .clock(clk),
-			 .wrreq(PortVwrreq), .data({6'd0, PortVaddr} + portV_readOffset),
-			 .rdreq(rdPortV), .empty(PortVempty), .usedw(PortVusedw), .q(PortVcmd[40:16])
-			 );
+   // Generate a good address to read from based off of the VGA x,y (pretends to be a FIFO)
+   logic rdPortV, PortVthreshold, PortVempty;
+   assign PortVthreshold = 0; // not a fifo, can't get full
+   logic [41:0] PortVcmd;
    assign PortVcmd[41] = 1'b0; // PortV always reads
    assign PortVcmd[15:0] = 'X;
-   // Urgently flush PortV when the FIFO is nearing full
-   assign PortVthreshold = (PortVusedw > 8'd200);
-   // Automated address generation for PortV
-   logic [8:0] 	PortVout_usedw; // how many words are in the output FIFO
-   // VGA_READ_AHEAD_MARGIN should be adjusted so that emptying the command buffer (cmdbUsedw/2 cycles) plus VGA_READ_AHEAD_MARGIN clock cycles is enough time for a value to be read to prevent the PortV output FIFO from emptying
-   assign PortVwrreq = (PortVout_usedw < ((cmdbUsedw >> 1) + VGA_READ_AHEAD_MARGIN));
-   always_ff @(posedge clk, posedge portV_arst) begin
-      if (portV_arst) begin
-	 PortVaddr <= '0;
+   logic xyInBounds;
+   logic [18:0] currentPixelAddress; // 2^19 > 640*480
+   logic [24:0] desiredPixelAddress, lastDesiredPixAddr;
+   always_comb begin
+      xyInBounds = (VGAx < 10'd640) & (VGAy < 10'd480);
+      // currentPixelAddress = 640*VGAy + VGAx
+      currentPixelAddress = {VGAy, 9'd0} + {2'd0, VGAy, 7'd0} + {9'd0, VGAx};
+      // VGA_READ_AHEAD_MARGIN should be adjusted so that emptying the command buffer (cmdbUsedw/2 cycles) plus VGA_READ_AHEAD_MARGIN clock cycles is enough time for a value to be read to prevent the PortV output FIFO from emptying
+      // desiredPixelAddress = readOffset + currentPixelAddress + VGA_READ_AHEAD_MARGIN + cmdbUsedw
+      desiredPixelAddress = readOffset + 
+{6'd0,( currentPixelAddress + VGA_READ_AHEAD_MARGIN + {11'd0, cmdbUsedw} )};
+   end
+   always_ff @(posedge clk) begin
+      if (rst) begin
+	 {PortVempty, PortVcmd[40:16]} <= 0;
       end else begin
-	 if (PortVwrreq) begin
-	    // PortVaddr = (PortVaddr + 1) % (640*480)
-	    PortVaddr <= (PortVaddr == 19'd307199) ? '0 : (PortVaddr + 19'd1);
-	 end else begin
-	    PortVaddr <= PortVaddr;
+	 if (xyInBounds) begin
+	    // If it's a new value, we haven't sent it
+	    if (PortVcmd[40:16] != desiredPixelAddress) PortVempty <= 0;
+	    
+	    PortVcmd[40:16] <= desiredPixelAddress;
 	 end
+	 
+	 // If the request is being sent to the SDRAM, it's now an old value
+	 if (rdPortV) PortVemtpy <= 1;
       end
    end
-   
+
+	 
    // cmdb: command buffer
    logic 	      cmdSend, cmdbFull, lastCmdWasWrite, nlastCmdWasWrite;
    // [7:0] cmdbUsedw defined above
@@ -241,6 +256,7 @@ module SDRAM_Ports (
 
    // PortV output data FIFO ([7:0] PortVout_wrreq defined near PortV cmd FIFO)
    logic PortVout_nullData, PortVout_wrreq;
+   logic [8:0] PortVout_usedw;
    FIFO_PortVout portVFIFOout (
 			 .aclr(portV_arst),
 			 .wrclk(clk), .wrreq(PortVout_wrreq), .data(PortVout_nullData ? VGA_NULL_DATA_COLOR : rdata), .wrusedw(PortVout_usedw),

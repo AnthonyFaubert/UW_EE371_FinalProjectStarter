@@ -190,6 +190,7 @@ wire        MIPI_PIXEL_CLK_;
 wire [9:0]  PCK;
 
 logic clk125; // 125 MHz clock for SDRAM
+logic [12:0] VGA_x, VGA_y; // x and y of the current VGA pixel   
 //=======================================================
 // Structural coding
 //=======================================================
@@ -222,28 +223,12 @@ assign CAMERA_I2C_SCL =( I2C_RELEASE  )?  CAMERA_I2C_SCL_AF  : CAMERA_I2C_SCL_MI
 //------ CLOCK GENERATOR --
 PLL_GenClocks clockGenerator (
       .refclk(CLOCK_50), .rst(0), // Configured the PLL to have an automatic self-reset
-      .outclk_0(),//(MIPI_REFCLK), // MIPI / VGA REF CLOCK, 20 MHz
-      .outclk_1(),//(VGA_CLK), // MIPI / VGA REF CLOCK, 25 MHz
+      .outclk_0(MIPI_REFCLK), // MIPI / VGA REF CLOCK, 20 MHz
+      .outclk_1(VGA_CLK), // MIPI / VGA REF CLOCK, 25 MHz
       .outclk_2(clk125), // SDRAM controller clock, 125 MHz
       .locked() // true if the PLL has acquired (locked onto) the reference clock
    );
-   
-  //------MIPI / VGA REF CLOCK  --
-pll_test pll_ref(
-	                   .inclk0 ( CLOCK3_50 ),
-	                   .areset ( ~KEY[2]   ),
-	                   .c0( MIPI_REFCLK    ) //20Mhz
-
-    );
-	 
-//------MIPI / VGA REF CLOCK  -
-VIDEO_PLL pll_ref1(
-	                   .inclk0 ( CLOCK2_50 ),
-	                   .areset ( ~KEY[2] ),
-	                   .c0( VGA_CLK )        //25 Mhz	
-    );	 
-
- 
+    
 //----- RESET RELAY  --		
 RESET_DELAY u2 (	
       .iRST  ( KEY[2] ),
@@ -286,7 +271,6 @@ MIPI_BRIDGE_CAMERA_Config    cfin(
       srstCtr <= srstCtr + 27'd0;
       if (srstCtr == 0) srstSlow <= srst;
    end
-	
    SDRAM_Ports sdramPorts (
 			   .clk(clk125), .rst(srstSlow),
 			   // Port C: camera write port
@@ -301,6 +285,8 @@ MIPI_BRIDGE_CAMERA_Config    cfin(
 			   // Automatic read requesting
 			   .portV_arst(~DLY_RST_1), // auto read requester async reset
 			   .portV_readOffset(25'd0),
+			   .portV_VGAx(VGA_x[9:0]), // VGA x,y for deciding what pixel value to ask the SDRAM for
+			   .portV_VGAy(VGA_y[9:0]), // TODO: fix VGA_Controller signal widths
 			   .portV_nextDout(READ_Request),
 			   .portV_dout(SDRAM_RD_DATA), // only [9:0] is actually used
 
@@ -335,79 +321,77 @@ MIPI_BRIDGE_CAMERA_Config    cfin(
 	 
 //------ CMOS CCD_DATA TO RGB_DATA -- 
 
-RAW2RGB_J				u4	(	
-							.RST          ( pre_VGA_VS ),
-							.iDATA        ( SDRAM_RD_DATA[9:0] ),
-
-							//-----------------------------------
-                     .VGA_CLK      ( VGA_CLK ),
-                     .READ_Request ( READ_Request ),
-                     .VGA_VS       ( pre_VGA_VS ),	
-							.VGA_HS       ( pre_VGA_HS ), 
+RAW2RGB_J u4 (	
+		.RST( pre_VGA_VS ),
+		.iDATA( SDRAM_RD_DATA[9:0] ),
+		
+		//-----------------------------------
+                .VGA_CLK      ( VGA_CLK ),
+                .READ_Request ( READ_Request ),
+                .VGA_VS       ( pre_VGA_VS ),	
+		.VGA_HS       ( pre_VGA_HS ), 
 	                  			
-							.oRed         ( RED  ),
-							.oGreen       ( GREEN),
-							.oBlue        ( BLUE )
-
-
-							);		 
+		.oRed         ( RED  ),
+		.oGreen       ( GREEN),
+		.oBlue        ( BLUE )
+);
+			   
 //------AOTO FOCUS ENABLE  --
-AUTO_FOCUS_ON  vd( 
-                      .CLK_50      ( CLOCK2_50 ), 
-                      .I2C_RELEASE ( I2C_RELEASE ), 
-                      .AUTO_FOC    ( AUTO_FOC )
-               ) ;
-					
+AUTO_FOCUS_ON vd ( 
+                   .CLK_50      ( CLOCK2_50 ), 
+                   .I2C_RELEASE ( I2C_RELEASE ), 
+                   .AUTO_FOC    ( AUTO_FOC )
+);				
 
 //------AOTO FOCUS ADJ  --
 FOCUS_ADJ adl(
-                      .CLK_50        ( CLOCK2_50 ) , 
-                      .RESET_N       ( I2C_RELEASE ), 
-                      .RESET_SUB_N   ( I2C_RELEASE ), 
-                      .AUTO_FOC      ( KEY[3] & AUTO_FOC ), 
-                      .SW_Y          ( 0 ),
-                      .SW_H_FREQ     ( 0 ),   
-                      .SW_FUC_LINE   ( SW[9] ),   
-                      .SW_FUC_ALL_CEN( SW[9] ),
-                      .VIDEO_HS      ( pre_VGA_HS ),
-                      .VIDEO_VS      ( pre_VGA_VS ),
-                      .VIDEO_CLK     ( VGA_CLK ),
-		                .VIDEO_DE      (READ_Request) ,
-                      .iR            ( R_AUTO ), 
-                      .iG            ( G_AUTO ), 
-                      .iB            ( B_AUTO ), 
-                      .oR            ( pre_VGA_R ) , 
-                      .oG            ( pre_VGA_G ) , 
-                      .oB            ( pre_VGA_B ) , 
-                      
-                      .READY         (), // ( READY ),
-                      .SCL           ( CAMERA_I2C_SCL_AF ), 
-                      .SDA           ( CAMERA_I2C_SDA )
+              .CLK_50        ( CLOCK2_50 ) , 
+              .RESET_N       ( I2C_RELEASE ), 
+              .RESET_SUB_N   ( I2C_RELEASE ), 
+              .AUTO_FOC      ( KEY[3] & AUTO_FOC ), 
+              .SW_Y          ( 0 ),
+              .SW_H_FREQ     ( 0 ),   
+              .SW_FUC_LINE   ( SW[9] ),   
+              .SW_FUC_ALL_CEN( SW[9] ),
+              .VIDEO_HS      ( pre_VGA_HS ),
+              .VIDEO_VS      ( pre_VGA_VS ),
+              .VIDEO_CLK     ( VGA_CLK ),
+	      .VIDEO_DE      (READ_Request) ,
+              .iR            ( R_AUTO ), 
+              .iG            ( G_AUTO ), 
+              .iB            ( B_AUTO ), 
+              .oR            ( pre_VGA_R ) , 
+              .oG            ( pre_VGA_G ) , 
+              .oB            ( pre_VGA_B ) , 
+              
+              .READY         (), // ( READY ),
+              .SCL           ( CAMERA_I2C_SCL_AF ), 
+              .SDA           ( CAMERA_I2C_SDA )
 );
 
 //------VGA Controller  --
-
-VGA_Controller		u1	(	//	Host Side
-							 .oRequest( READ_Request ),
-							 .iRed    ( RED    ),
-							 .iGreen  ( GREEN  ),
-							 .iBlue   ( BLUE   ),
-							 
-							 //	VGA Side
-							 .oVGA_R  ( R_AUTO[7:0] ),
-							 .oVGA_G  ( G_AUTO[7:0] ),
-							 .oVGA_B  ( B_AUTO[7:0] ),
-							 .oVGA_H_SYNC( pre_VGA_HS ),
-							 .oVGA_V_SYNC( pre_VGA_VS ),
-							 .oVGA_SYNC  ( pre_VGA_SYNC_N ),
-							 .oVGA_BLANK ( pre_VGA_BLANK_N ),
-							 //	Control Signal
-							 .iCLK       ( VGA_CLK ),
-							 .iRST_N     ( DLY_RST_2 ),
-							 .H_Cont     ( VGA_H_CNT ),						
-						    .V_Cont     ( VGA_V_CNT )								
-		);	
-
+VGA_Controller u1 ( // Host Side
+		    .oRequest( READ_Request ),
+		    .iRed    ( RED    ),
+		    .iGreen  ( GREEN  ),
+		    .iBlue   ( BLUE   ),
+		    
+		    //	VGA Side
+		    .oVGA_R  ( R_AUTO[7:0] ),
+		    .oVGA_G  ( G_AUTO[7:0] ),
+		    .oVGA_B  ( B_AUTO[7:0] ),
+		    .oVGA_H_SYNC( pre_VGA_HS ),
+		    .oVGA_V_SYNC( pre_VGA_VS ),
+		    .oVGA_SYNC  ( pre_VGA_SYNC_N ),
+		    .oVGA_BLANK ( pre_VGA_BLANK_N ),
+		    //	Control Signal
+		    .iCLK       ( VGA_CLK ),
+		    .iRST_N     ( DLY_RST_2 ),
+		    .H_Cont     ( VGA_H_CNT ),
+		    .V_Cont     ( VGA_V_CNT ),
+		    .x(),
+		    .y()
+);
 
 //------VS FREQUENCY TEST = 60HZ --
 							

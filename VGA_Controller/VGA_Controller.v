@@ -1,20 +1,21 @@
 
 module	VGA_Controller(	
-      input	    		   iCLK,
-      input	    	   	iRST_N,
-      input	    [7:0]	iRed,
-      input	    [7:0]	iGreen,
-      input	    [7:0]	iBlue,
-      output      		oRequest,
-      output		[7:0]	oVGA_R,
-      output		[7:0]	oVGA_G,
-      output		[7:0]	oVGA_B,
-      output				oVGA_H_SYNC,
-      output				oVGA_V_SYNC,
-      output				oVGA_SYNC,
-      output				oVGA_BLANK,
-      output	reg		[12:0]		H_Cont,
-      output	reg		[12:0]		V_Cont						
+      input 		 iCLK,
+      input 		 iRST_N,
+      input [7:0] 	 iRed,
+      input [7:0] 	 iGreen,
+      input [7:0] 	 iBlue,
+      output 		 oRequest,
+      output [7:0] 	 oVGA_R,
+      output [7:0] 	 oVGA_G,
+      output [7:0] 	 oVGA_B,
+      output 		 oVGA_H_SYNC,
+      output 		 oVGA_V_SYNC,
+      output 		 oVGA_SYNC,
+      output 		 oVGA_BLANK,
+      output reg [12:0]  H_Cont,
+      output reg [12:0]  V_Cont,
+      output wire [12:0] x, y
 		);
 
 //=======================================================
@@ -29,7 +30,9 @@ parameter V_MARK   = 9; //MAX 9
 // Structural coding
 //=======================================================
 
-																  
+   assign x = H_Cont - H_BLANK;
+   assign y = V_Cont - V_BLANK;
+
 //---h 								  
 always@(posedge iCLK or negedge iRST_N)
 begin
