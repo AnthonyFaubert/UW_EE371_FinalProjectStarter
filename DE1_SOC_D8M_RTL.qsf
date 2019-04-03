@@ -547,10 +547,21 @@ set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
 
 
 
+set_global_assignment -name ENABLE_SIGNALTAP ON
+set_global_assignment -name USE_SIGNALTAP_FILE SignalTap.stp
+set_global_assignment -name VERILOG_FILE V_Sdram_Control/command.v
+set_global_assignment -name VERILOG_FILE V_Sdram_Control/control_interface.v
+set_global_assignment -name VERILOG_FILE V_Sdram_Control/sdr_data_path.v
+set_global_assignment -name VERILOG_FILE V_Sdram_Control/Sdram_Control.v
+set_global_assignment -name SOURCE_FILE V_Sdram_Control/Sdram_Params.h
+set_global_assignment -name QIP_FILE V_Sdram_Control/Sdram_RD_FIFO.qip
+set_global_assignment -name QIP_FILE V_Sdram_Control/Sdram_WR_FIFO.qip
+set_global_assignment -name SIGNALTAP_FILE SignalTap.stp
 set_global_assignment -name SYSTEMVERILOG_FILE DE1_SOC_D8M_RTL.sv
 set_global_assignment -name CDF_FILE ProgramTheDE1_SoC.cdf
 set_global_assignment -name SYSTEMVERILOG_FILE Filter.sv
 set_global_assignment -name SYSTEMVERILOG_FILE CameraCoordTracker.sv
+set_global_assignment -name SDC_FILE DE1_SOC_D8M_RTL.sdc
 set_global_assignment -name SYSTEMVERILOG_FILE SDRAM_Ports/SDRAM_Ports.sv
 set_global_assignment -name SOURCE_FILE VGA_Controller/VGA_Param.h
 set_global_assignment -name VERILOG_FILE VGA_Controller/VGA_Controller.v
@@ -594,4 +605,713 @@ set_global_assignment -name QIP_FILE SDRAM_Ports/FIFO_Port0out.qip
 set_global_assignment -name QIP_FILE SDRAM_Ports/FIFO_PortVout.qip
 set_global_assignment -name QIP_FILE PLL_GenClocks.qip
 set_global_assignment -name SIP_FILE PLL_GenClocks.sip
+set_global_assignment -name SLD_NODE_CREATOR_ID 110 -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_ENTITY_NAME sld_signaltap -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_clk -to "CameraCoordTracker:camTracker|clk" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "CameraCoordTracker:camTracker|hsync_n" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to "CameraCoordTracker:camTracker|pixelAddress[0]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to "CameraCoordTracker:camTracker|pixelAddress[10]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[3] -to "CameraCoordTracker:camTracker|pixelAddress[11]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[4] -to "CameraCoordTracker:camTracker|pixelAddress[12]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[5] -to "CameraCoordTracker:camTracker|pixelAddress[13]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[6] -to "CameraCoordTracker:camTracker|pixelAddress[14]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[7] -to "CameraCoordTracker:camTracker|pixelAddress[15]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[8] -to "CameraCoordTracker:camTracker|pixelAddress[16]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[9] -to "CameraCoordTracker:camTracker|pixelAddress[17]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[10] -to "CameraCoordTracker:camTracker|pixelAddress[18]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[11] -to "CameraCoordTracker:camTracker|pixelAddress[1]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[12] -to "CameraCoordTracker:camTracker|pixelAddress[2]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[13] -to "CameraCoordTracker:camTracker|pixelAddress[3]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[14] -to "CameraCoordTracker:camTracker|pixelAddress[4]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[15] -to "CameraCoordTracker:camTracker|pixelAddress[5]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[16] -to "CameraCoordTracker:camTracker|pixelAddress[6]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[17] -to "CameraCoordTracker:camTracker|pixelAddress[7]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[18] -to "CameraCoordTracker:camTracker|pixelAddress[8]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[19] -to "CameraCoordTracker:camTracker|pixelAddress[9]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[20] -to "CameraCoordTracker:camTracker|pixelValid" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[21] -to "CameraCoordTracker:camTracker|vsync_n" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[22] -to "CameraCoordTracker:camTracker|x[0]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[23] -to "CameraCoordTracker:camTracker|x[1]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[24] -to "CameraCoordTracker:camTracker|x[2]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[25] -to "CameraCoordTracker:camTracker|x[3]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[26] -to "CameraCoordTracker:camTracker|x[4]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[27] -to "CameraCoordTracker:camTracker|x[5]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[28] -to "CameraCoordTracker:camTracker|x[6]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[29] -to "CameraCoordTracker:camTracker|x[7]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[30] -to "CameraCoordTracker:camTracker|x[8]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[31] -to "CameraCoordTracker:camTracker|x[9]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[32] -to "CameraCoordTracker:camTracker|y[0]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[33] -to "CameraCoordTracker:camTracker|y[1]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[34] -to "CameraCoordTracker:camTracker|y[2]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[35] -to "CameraCoordTracker:camTracker|y[3]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[36] -to "CameraCoordTracker:camTracker|y[4]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[37] -to "CameraCoordTracker:camTracker|y[5]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[38] -to "CameraCoordTracker:camTracker|y[6]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[39] -to "CameraCoordTracker:camTracker|y[7]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[40] -to "CameraCoordTracker:camTracker|y[8]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[41] -to "CameraCoordTracker:camTracker|y[9]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[42] -to MIPI_PIXEL_D[0] -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[43] -to MIPI_PIXEL_D[1] -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[44] -to MIPI_PIXEL_D[2] -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[45] -to MIPI_PIXEL_D[3] -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[46] -to MIPI_PIXEL_D[4] -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[47] -to MIPI_PIXEL_D[5] -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[48] -to MIPI_PIXEL_D[6] -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[49] -to MIPI_PIXEL_D[7] -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[50] -to MIPI_PIXEL_D[8] -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[51] -to MIPI_PIXEL_D[9] -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[0] -to "CameraCoordTracker:camTracker|hsync_n" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[1] -to "CameraCoordTracker:camTracker|pixelAddress[0]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[2] -to "CameraCoordTracker:camTracker|pixelAddress[10]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[3] -to "CameraCoordTracker:camTracker|pixelAddress[11]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[4] -to "CameraCoordTracker:camTracker|pixelAddress[12]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[5] -to "CameraCoordTracker:camTracker|pixelAddress[13]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[6] -to "CameraCoordTracker:camTracker|pixelAddress[14]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[7] -to "CameraCoordTracker:camTracker|pixelAddress[15]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[8] -to "CameraCoordTracker:camTracker|pixelAddress[16]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[9] -to "CameraCoordTracker:camTracker|pixelAddress[17]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[10] -to "CameraCoordTracker:camTracker|pixelAddress[18]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[11] -to "CameraCoordTracker:camTracker|pixelAddress[1]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[12] -to "CameraCoordTracker:camTracker|pixelAddress[2]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[13] -to "CameraCoordTracker:camTracker|pixelAddress[3]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[14] -to "CameraCoordTracker:camTracker|pixelAddress[4]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[15] -to "CameraCoordTracker:camTracker|pixelAddress[5]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[16] -to "CameraCoordTracker:camTracker|pixelAddress[6]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[17] -to "CameraCoordTracker:camTracker|pixelAddress[7]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[18] -to "CameraCoordTracker:camTracker|pixelAddress[8]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[19] -to "CameraCoordTracker:camTracker|pixelAddress[9]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[20] -to "CameraCoordTracker:camTracker|pixelValid" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[21] -to "CameraCoordTracker:camTracker|vsync_n" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[22] -to "CameraCoordTracker:camTracker|x[0]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[23] -to "CameraCoordTracker:camTracker|x[1]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[24] -to "CameraCoordTracker:camTracker|x[2]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[25] -to "CameraCoordTracker:camTracker|x[3]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[26] -to "CameraCoordTracker:camTracker|x[4]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[27] -to "CameraCoordTracker:camTracker|x[5]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[28] -to "CameraCoordTracker:camTracker|x[6]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[29] -to "CameraCoordTracker:camTracker|x[7]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[30] -to "CameraCoordTracker:camTracker|x[8]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[31] -to "CameraCoordTracker:camTracker|x[9]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[32] -to "CameraCoordTracker:camTracker|y[0]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[33] -to "CameraCoordTracker:camTracker|y[1]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[34] -to "CameraCoordTracker:camTracker|y[2]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[35] -to "CameraCoordTracker:camTracker|y[3]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[36] -to "CameraCoordTracker:camTracker|y[4]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[37] -to "CameraCoordTracker:camTracker|y[5]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[38] -to "CameraCoordTracker:camTracker|y[6]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[39] -to "CameraCoordTracker:camTracker|y[7]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[40] -to "CameraCoordTracker:camTracker|y[8]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[41] -to "CameraCoordTracker:camTracker|y[9]" -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[42] -to MIPI_PIXEL_D[0] -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[43] -to MIPI_PIXEL_D[1] -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[44] -to MIPI_PIXEL_D[2] -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[45] -to MIPI_PIXEL_D[3] -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[46] -to MIPI_PIXEL_D[4] -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[47] -to MIPI_PIXEL_D[5] -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[48] -to MIPI_PIXEL_D[6] -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[49] -to MIPI_PIXEL_D[7] -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[50] -to MIPI_PIXEL_D[8] -section_id Camera_20data_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[51] -to MIPI_PIXEL_D[9] -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_RAM_BLOCK_TYPE=AUTO" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=52" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=52" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_BITS=52" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_INFO=805334528" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_POWER_UP_TRIGGER=0" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=172" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_INVERSION_MASK_LENGTH=0" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=4" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ATTRIBUTE_MEM_MODE=OFF" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_FLOW_USE_GENERATED=0" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_BITS=11" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_BUFFER_FULL_STOP=1" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_CURRENT_RESOURCE_WIDTH=1" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INCREMENTAL_ROUTING=1" -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[0] -to Camera_20data_20monitor|gnd -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[1] -to Camera_20data_20monitor|gnd -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[2] -to Camera_20data_20monitor|gnd -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[3] -to Camera_20data_20monitor|vcc -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[4] -to Camera_20data_20monitor|gnd -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[5] -to Camera_20data_20monitor|gnd -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[6] -to Camera_20data_20monitor|vcc -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[7] -to Camera_20data_20monitor|vcc -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[8] -to Camera_20data_20monitor|gnd -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[9] -to Camera_20data_20monitor|vcc -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[10] -to Camera_20data_20monitor|vcc -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[11] -to Camera_20data_20monitor|gnd -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[12] -to Camera_20data_20monitor|vcc -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[13] -to Camera_20data_20monitor|vcc -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[14] -to Camera_20data_20monitor|gnd -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[15] -to Camera_20data_20monitor|gnd -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[16] -to Camera_20data_20monitor|gnd -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[17] -to Camera_20data_20monitor|gnd -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[18] -to Camera_20data_20monitor|vcc -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[19] -to Camera_20data_20monitor|gnd -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[20] -to Camera_20data_20monitor|gnd -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[21] -to Camera_20data_20monitor|gnd -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[22] -to Camera_20data_20monitor|gnd -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[23] -to Camera_20data_20monitor|vcc -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[24] -to Camera_20data_20monitor|gnd -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[25] -to Camera_20data_20monitor|vcc -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[26] -to Camera_20data_20monitor|vcc -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[27] -to Camera_20data_20monitor|vcc -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[28] -to Camera_20data_20monitor|gnd -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[29] -to Camera_20data_20monitor|vcc -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[30] -to Camera_20data_20monitor|gnd -section_id Camera_20data_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[31] -to Camera_20data_20monitor|vcc -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL=1" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=128" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_IN_ENABLED=0" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_PIPELINE=0" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_RAM_PIPELINE=0" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_COUNTER_PIPELINE=0" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ADVANCED_TRIGGER_ENTITY=basic,1," -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL_PIPELINE=1" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ENABLE_ADVANCED_TRIGGER=0" -section_id Camera_20data_20monitor
+set_global_assignment -name SLD_NODE_CREATOR_ID 110 -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_ENTITY_NAME sld_signaltap -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_clk -to DRAM_CLK -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_RAM_BLOCK_TYPE=AUTO" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_INFO=805334529" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_POWER_UP_TRIGGER=0" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_INVERSION_MASK_LENGTH=0" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ATTRIBUTE_MEM_MODE=OFF" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_FLOW_USE_GENERATED=0" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_BITS=11" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_BUFFER_FULL_STOP=1" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_CURRENT_RESOURCE_WIDTH=1" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INCREMENTAL_ROUTING=1" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[2] -to SDRAM_20readout_20monitor|gnd -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[3] -to SDRAM_20readout_20monitor|vcc -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[4] -to SDRAM_20readout_20monitor|gnd -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[8] -to SDRAM_20readout_20monitor|gnd -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[10] -to SDRAM_20readout_20monitor|gnd -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[11] -to SDRAM_20readout_20monitor|vcc -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[16] -to SDRAM_20readout_20monitor|gnd -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[18] -to SDRAM_20readout_20monitor|gnd -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[22] -to SDRAM_20readout_20monitor|vcc -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[23] -to SDRAM_20readout_20monitor|vcc -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[26] -to SDRAM_20readout_20monitor|gnd -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[27] -to SDRAM_20readout_20monitor|gnd -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[30] -to SDRAM_20readout_20monitor|gnd -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL=1" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_IN_ENABLED=0" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_PIPELINE=0" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_RAM_PIPELINE=0" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_COUNTER_PIPELINE=0" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL_PIPELINE=1" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_CREATOR_ID 110 -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_ENTITY_NAME sld_signaltap -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_clk -to CLOCK_50 -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "CameraCoordTracker:camTracker|clk" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to "CameraCoordTracker:camTracker|hsync_n" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to "CameraCoordTracker:camTracker|vsync_n" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[3] -to DRAM_CLK -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[4] -to "MIPI_BRIDGE_CAMERA_Config:cfin|RESET_N" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[5] -to MIPI_PIXEL_HS -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[6] -to MIPI_PIXEL_VS -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[7] -to "PLL_GenClocks:clockGenerator|outclk_0" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[8] -to "PLL_GenClocks:clockGenerator|outclk_1" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[9] -to "PLL_GenClocks:clockGenerator|outclk_2" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[10] -to "RESET_DELAY:u2|iRST" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[11] -to "RESET_DELAY:u2|oREADY" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[12] -to "RESET_DELAY:u2|oRST_0" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[13] -to "RESET_DELAY:u2|oRST_1" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[14] -to "RESET_DELAY:u2|oRST_2" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[0] -to "CameraCoordTracker:camTracker|clk" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[1] -to "CameraCoordTracker:camTracker|hsync_n" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[2] -to "CameraCoordTracker:camTracker|vsync_n" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[3] -to DRAM_CLK -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[4] -to "MIPI_BRIDGE_CAMERA_Config:cfin|RESET_N" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[5] -to MIPI_PIXEL_HS -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[6] -to MIPI_PIXEL_VS -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[7] -to "PLL_GenClocks:clockGenerator|outclk_0" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[8] -to "PLL_GenClocks:clockGenerator|outclk_1" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[9] -to "PLL_GenClocks:clockGenerator|outclk_2" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[10] -to "RESET_DELAY:u2|iRST" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[11] -to "RESET_DELAY:u2|oREADY" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[12] -to "RESET_DELAY:u2|oRST_0" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[13] -to "RESET_DELAY:u2|oRST_1" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[14] -to "RESET_DELAY:u2|oRST_2" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_RAM_BLOCK_TYPE=AUTO" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=15" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=15" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_BITS=15" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_INFO=805334530" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_POWER_UP_TRIGGER=0" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=000000000000000000000" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=21" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_INVERSION_MASK_LENGTH=0" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=128" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ATTRIBUTE_MEM_MODE=OFF" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_FLOW_USE_GENERATED=0" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_BITS=11" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_BUFFER_FULL_STOP=1" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_CURRENT_RESOURCE_WIDTH=1" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INCREMENTAL_ROUTING=1" -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[0] -to CLOCK_50_20misc_2e_20monitor|gnd -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[1] -to CLOCK_50_20misc_2e_20monitor|vcc -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[2] -to CLOCK_50_20misc_2e_20monitor|vcc -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[3] -to CLOCK_50_20misc_2e_20monitor|gnd -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[4] -to CLOCK_50_20misc_2e_20monitor|vcc -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[5] -to CLOCK_50_20misc_2e_20monitor|gnd -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[6] -to CLOCK_50_20misc_2e_20monitor|gnd -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[7] -to CLOCK_50_20misc_2e_20monitor|vcc -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[8] -to CLOCK_50_20misc_2e_20monitor|gnd -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[9] -to CLOCK_50_20misc_2e_20monitor|vcc -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[10] -to CLOCK_50_20misc_2e_20monitor|gnd -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[11] -to CLOCK_50_20misc_2e_20monitor|vcc -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[12] -to CLOCK_50_20misc_2e_20monitor|vcc -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[13] -to CLOCK_50_20misc_2e_20monitor|gnd -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[14] -to CLOCK_50_20misc_2e_20monitor|vcc -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[15] -to CLOCK_50_20misc_2e_20monitor|vcc -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[16] -to CLOCK_50_20misc_2e_20monitor|vcc -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[17] -to CLOCK_50_20misc_2e_20monitor|gnd -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[18] -to CLOCK_50_20misc_2e_20monitor|gnd -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[19] -to CLOCK_50_20misc_2e_20monitor|gnd -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[20] -to CLOCK_50_20misc_2e_20monitor|vcc -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[21] -to CLOCK_50_20misc_2e_20monitor|vcc -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[22] -to CLOCK_50_20misc_2e_20monitor|gnd -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[23] -to CLOCK_50_20misc_2e_20monitor|gnd -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[24] -to CLOCK_50_20misc_2e_20monitor|gnd -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[25] -to CLOCK_50_20misc_2e_20monitor|gnd -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[26] -to CLOCK_50_20misc_2e_20monitor|vcc -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[27] -to CLOCK_50_20misc_2e_20monitor|gnd -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[28] -to CLOCK_50_20misc_2e_20monitor|gnd -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[29] -to CLOCK_50_20misc_2e_20monitor|vcc -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[30] -to CLOCK_50_20misc_2e_20monitor|gnd -section_id CLOCK_50_20misc_2e_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[31] -to CLOCK_50_20misc_2e_20monitor|gnd -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL=1" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=128" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_IN_ENABLED=0" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_PIPELINE=0" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_RAM_PIPELINE=0" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_COUNTER_PIPELINE=0" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ADVANCED_TRIGGER_ENTITY=sld_reserved_DE1_SOC_D8M_RTL_CLOCK_50_misc__monitor_1_aae2," -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL_PIPELINE=1" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ENABLE_ADVANCED_TRIGGER=1" -section_id CLOCK_50_20misc_2e_20monitor
+set_global_assignment -name SLD_NODE_CREATOR_ID 110 -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_ENTITY_NAME sld_signaltap -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_clk -to "SDRAM_Ports:sdramPorts|portV_clk" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "SDRAM_Ports:sdramPorts|portV_dout[0]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to "SDRAM_Ports:sdramPorts|portV_dout[10]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to "SDRAM_Ports:sdramPorts|portV_dout[11]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[3] -to "SDRAM_Ports:sdramPorts|portV_dout[12]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[4] -to "SDRAM_Ports:sdramPorts|portV_dout[13]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[5] -to "SDRAM_Ports:sdramPorts|portV_dout[14]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[6] -to "SDRAM_Ports:sdramPorts|portV_dout[15]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[7] -to "SDRAM_Ports:sdramPorts|portV_dout[1]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[8] -to "SDRAM_Ports:sdramPorts|portV_dout[2]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[9] -to "SDRAM_Ports:sdramPorts|portV_dout[3]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[10] -to "SDRAM_Ports:sdramPorts|portV_dout[4]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[11] -to "SDRAM_Ports:sdramPorts|portV_dout[5]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[12] -to "SDRAM_Ports:sdramPorts|portV_dout[6]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[13] -to "SDRAM_Ports:sdramPorts|portV_dout[7]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[14] -to "SDRAM_Ports:sdramPorts|portV_dout[8]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[15] -to "SDRAM_Ports:sdramPorts|portV_dout[9]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[16] -to "SDRAM_Ports:sdramPorts|portV_nextDout" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[17] -to "SDRAM_Ports:sdramPorts|rdPortV" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[18] -to "SDRAM_Ports:sdramPorts|rst" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[0] -to "SDRAM_Ports:sdramPorts|portV_dout[0]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[1] -to "SDRAM_Ports:sdramPorts|portV_dout[10]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[2] -to "SDRAM_Ports:sdramPorts|portV_dout[11]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[3] -to "SDRAM_Ports:sdramPorts|portV_dout[12]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[4] -to "SDRAM_Ports:sdramPorts|portV_dout[13]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[5] -to "SDRAM_Ports:sdramPorts|portV_dout[14]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[6] -to "SDRAM_Ports:sdramPorts|portV_dout[15]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[7] -to "SDRAM_Ports:sdramPorts|portV_dout[1]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[8] -to "SDRAM_Ports:sdramPorts|portV_dout[2]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[9] -to "SDRAM_Ports:sdramPorts|portV_dout[3]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[10] -to "SDRAM_Ports:sdramPorts|portV_dout[4]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[11] -to "SDRAM_Ports:sdramPorts|portV_dout[5]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[12] -to "SDRAM_Ports:sdramPorts|portV_dout[6]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[13] -to "SDRAM_Ports:sdramPorts|portV_dout[7]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[14] -to "SDRAM_Ports:sdramPorts|portV_dout[8]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[15] -to "SDRAM_Ports:sdramPorts|portV_dout[9]" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[16] -to "SDRAM_Ports:sdramPorts|portV_nextDout" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[17] -to "SDRAM_Ports:sdramPorts|rdPortV" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[18] -to "SDRAM_Ports:sdramPorts|rst" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_RAM_BLOCK_TYPE=AUTO" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=19" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=19" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_BITS=19" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_INFO=805334531" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_POWER_UP_TRIGGER=0" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=000000000000000000000" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=21" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_INVERSION_MASK_LENGTH=0" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=128" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ATTRIBUTE_MEM_MODE=OFF" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_FLOW_USE_GENERATED=0" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_BITS=11" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_BUFFER_FULL_STOP=1" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_CURRENT_RESOURCE_WIDTH=1" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INCREMENTAL_ROUTING=1" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[0] -to SDRAM_2d_3eVGA_20readout_20monitor|gnd -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[1] -to SDRAM_2d_3eVGA_20readout_20monitor|gnd -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[2] -to SDRAM_2d_3eVGA_20readout_20monitor|vcc -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[3] -to SDRAM_2d_3eVGA_20readout_20monitor|gnd -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[4] -to SDRAM_2d_3eVGA_20readout_20monitor|vcc -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[5] -to SDRAM_2d_3eVGA_20readout_20monitor|gnd -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[6] -to SDRAM_2d_3eVGA_20readout_20monitor|gnd -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[7] -to SDRAM_2d_3eVGA_20readout_20monitor|vcc -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[8] -to SDRAM_2d_3eVGA_20readout_20monitor|vcc -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[9] -to SDRAM_2d_3eVGA_20readout_20monitor|gnd -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[10] -to SDRAM_2d_3eVGA_20readout_20monitor|vcc -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[11] -to SDRAM_2d_3eVGA_20readout_20monitor|gnd -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[12] -to SDRAM_2d_3eVGA_20readout_20monitor|vcc -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[13] -to SDRAM_2d_3eVGA_20readout_20monitor|vcc -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[14] -to SDRAM_2d_3eVGA_20readout_20monitor|gnd -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[15] -to SDRAM_2d_3eVGA_20readout_20monitor|gnd -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[16] -to SDRAM_2d_3eVGA_20readout_20monitor|vcc -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[17] -to SDRAM_2d_3eVGA_20readout_20monitor|vcc -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[18] -to SDRAM_2d_3eVGA_20readout_20monitor|gnd -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[19] -to SDRAM_2d_3eVGA_20readout_20monitor|vcc -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[20] -to SDRAM_2d_3eVGA_20readout_20monitor|vcc -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[21] -to SDRAM_2d_3eVGA_20readout_20monitor|gnd -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[22] -to SDRAM_2d_3eVGA_20readout_20monitor|gnd -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[23] -to SDRAM_2d_3eVGA_20readout_20monitor|gnd -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[24] -to SDRAM_2d_3eVGA_20readout_20monitor|vcc -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[25] -to SDRAM_2d_3eVGA_20readout_20monitor|gnd -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[26] -to SDRAM_2d_3eVGA_20readout_20monitor|gnd -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[27] -to SDRAM_2d_3eVGA_20readout_20monitor|vcc -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[28] -to SDRAM_2d_3eVGA_20readout_20monitor|gnd -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[29] -to SDRAM_2d_3eVGA_20readout_20monitor|gnd -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[30] -to SDRAM_2d_3eVGA_20readout_20monitor|vcc -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[31] -to SDRAM_2d_3eVGA_20readout_20monitor|vcc -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL=1" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=128" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_IN_ENABLED=0" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_PIPELINE=0" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_RAM_PIPELINE=0" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_COUNTER_PIPELINE=0" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ADVANCED_TRIGGER_ENTITY=sld_reserved_DE1_SOC_D8M_RTL_SDRAM__VGA_readout_monitor_1_7344," -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL_PIPELINE=1" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ENABLE_ADVANCED_TRIGGER=1" -section_id SDRAM_2d_3eVGA_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[0]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[10]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[11]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[3] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[12]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[4] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[13]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[5] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[14]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[6] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[15]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[7] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[16]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[8] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[17]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[9] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[18]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[10] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[19]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[11] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[1]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[12] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[20]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[13] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[21]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[14] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[22]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[15] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[23]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[16] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[24]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[17] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[2]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[18] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[3]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[19] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[4]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[20] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[5]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[21] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[6]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[22] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[7]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[23] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[8]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[24] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[9]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[25] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[0]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[26] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[10]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[27] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[11]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[28] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[12]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[29] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[13]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[30] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[14]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[31] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[15]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[32] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[1]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[33] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[2]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[34] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[3]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[35] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[4]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[36] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[5]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[37] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[6]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[38] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[7]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[39] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[8]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[40] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[9]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[41] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|readValid" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[42] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[0]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[43] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[10]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[44] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[11]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[45] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[12]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[46] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[13]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[47] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[14]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[48] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[15]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[49] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[16]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[50] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[17]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[51] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[18]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[52] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[19]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[53] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[1]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[54] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[20]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[55] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[21]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[56] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[22]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[57] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[23]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[58] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[24]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[59] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[2]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[60] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[3]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[61] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[4]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[62] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[5]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[63] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[6]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[64] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[7]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[65] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[8]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[66] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[9]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[67] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|rdreq" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[68] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[0]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[69] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[10]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[70] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[11]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[71] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[12]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[72] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[13]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[73] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[14]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[74] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[15]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[75] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[1]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[76] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[2]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[77] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[3]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[78] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[4]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[79] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[5]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[80] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[6]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[81] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[7]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[82] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[8]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[83] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[9]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[84] -to "SDRAM_Ports:sdramPorts|PortVout_nullData" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[85] -to "SDRAM_Ports:sdramPorts|PortVout_wrreq" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[86] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[0]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[87] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[10]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[88] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[11]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[89] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[12]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[90] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[13]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[91] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[14]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[92] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[15]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[93] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[16]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[94] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[17]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[95] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[18]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[96] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[1]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[97] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[2]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[98] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[3]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[99] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[4]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[100] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[5]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[101] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[6]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[102] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[7]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[103] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[8]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[104] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[9]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[105] -to "SDRAM_Ports:sdramPorts|cmdSend" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[106] -to "SDRAM_Ports:sdramPorts|command[0]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[107] -to "SDRAM_Ports:sdramPorts|command[10]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[108] -to "SDRAM_Ports:sdramPorts|command[11]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[109] -to "SDRAM_Ports:sdramPorts|command[12]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[110] -to "SDRAM_Ports:sdramPorts|command[13]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[111] -to "SDRAM_Ports:sdramPorts|command[14]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[112] -to "SDRAM_Ports:sdramPorts|command[15]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[113] -to "SDRAM_Ports:sdramPorts|command[16]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[114] -to "SDRAM_Ports:sdramPorts|command[17]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[115] -to "SDRAM_Ports:sdramPorts|command[18]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[116] -to "SDRAM_Ports:sdramPorts|command[19]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[117] -to "SDRAM_Ports:sdramPorts|command[1]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[118] -to "SDRAM_Ports:sdramPorts|command[20]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[119] -to "SDRAM_Ports:sdramPorts|command[21]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[120] -to "SDRAM_Ports:sdramPorts|command[22]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[121] -to "SDRAM_Ports:sdramPorts|command[23]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[122] -to "SDRAM_Ports:sdramPorts|command[24]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[123] -to "SDRAM_Ports:sdramPorts|command[25]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[124] -to "SDRAM_Ports:sdramPorts|command[26]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[125] -to "SDRAM_Ports:sdramPorts|command[27]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[126] -to "SDRAM_Ports:sdramPorts|command[28]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[127] -to "SDRAM_Ports:sdramPorts|command[29]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[128] -to "SDRAM_Ports:sdramPorts|command[2]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[129] -to "SDRAM_Ports:sdramPorts|command[30]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[130] -to "SDRAM_Ports:sdramPorts|command[31]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[131] -to "SDRAM_Ports:sdramPorts|command[32]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[132] -to "SDRAM_Ports:sdramPorts|command[33]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[133] -to "SDRAM_Ports:sdramPorts|command[34]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[134] -to "SDRAM_Ports:sdramPorts|command[35]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[135] -to "SDRAM_Ports:sdramPorts|command[36]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[136] -to "SDRAM_Ports:sdramPorts|command[37]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[137] -to "SDRAM_Ports:sdramPorts|command[38]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[138] -to "SDRAM_Ports:sdramPorts|command[39]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[139] -to "SDRAM_Ports:sdramPorts|command[3]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[140] -to "SDRAM_Ports:sdramPorts|command[40]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[141] -to "SDRAM_Ports:sdramPorts|command[41]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[142] -to "SDRAM_Ports:sdramPorts|command[4]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[143] -to "SDRAM_Ports:sdramPorts|command[5]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[144] -to "SDRAM_Ports:sdramPorts|command[6]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[145] -to "SDRAM_Ports:sdramPorts|command[7]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[146] -to "SDRAM_Ports:sdramPorts|command[8]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[147] -to "SDRAM_Ports:sdramPorts|command[9]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[0] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[0]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[1] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[10]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[2] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[11]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[3] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[12]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[4] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[13]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[5] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[14]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[6] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[15]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[7] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[16]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[8] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[17]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[9] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[18]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[10] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[19]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[11] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[1]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[12] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[20]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[13] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[21]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[14] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[22]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[15] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[23]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[16] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[24]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[17] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[2]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[18] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[3]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[19] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[4]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[20] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[5]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[21] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[6]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[22] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[7]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[23] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[8]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[24] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|raddr[9]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[25] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[0]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[26] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[10]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[27] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[11]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[28] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[12]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[29] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[13]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[30] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[14]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[31] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[15]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[32] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[1]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[33] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[2]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[34] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[3]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[35] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[4]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[36] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[5]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[37] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[6]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[38] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[7]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[39] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[8]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[40] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|rdata[9]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[41] -to "SDRAM_Ports:sdramPorts|EasySDRAM:sdram|readValid" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[42] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[0]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[43] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[10]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[44] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[11]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[45] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[12]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[46] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[13]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[47] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[14]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[48] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[15]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[49] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[16]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[50] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[17]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[51] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[18]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[52] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[19]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[53] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[1]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[54] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[20]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[55] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[21]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[56] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[22]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[57] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[23]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[58] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[24]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[59] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[2]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[60] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[3]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[61] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[4]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[62] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[5]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[63] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[6]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[64] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[7]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[65] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[8]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[66] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|q[9]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[67] -to "SDRAM_Ports:sdramPorts|FIFO_PortVcmd:portVFIFOcmd|rdreq" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[68] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[0]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[69] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[10]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[70] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[11]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[71] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[12]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[72] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[13]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[73] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[14]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[74] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[15]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[75] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[1]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[76] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[2]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[77] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[3]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[78] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[4]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[79] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[5]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[80] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[6]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[81] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[7]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[82] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[8]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[83] -to "SDRAM_Ports:sdramPorts|FIFO_PortVout:portVFIFOout|data[9]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[84] -to "SDRAM_Ports:sdramPorts|PortVout_nullData" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[85] -to "SDRAM_Ports:sdramPorts|PortVout_wrreq" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[86] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[0]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[87] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[10]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[88] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[11]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[89] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[12]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[90] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[13]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[91] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[14]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[92] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[15]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[93] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[16]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[94] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[17]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[95] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[18]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[96] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[1]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[97] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[2]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[98] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[3]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[99] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[4]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[100] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[5]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[101] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[6]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[102] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[7]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[103] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[8]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[104] -to "SDRAM_Ports:sdramPorts|VGA_addrTracker[9]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[105] -to "SDRAM_Ports:sdramPorts|cmdSend" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[106] -to "SDRAM_Ports:sdramPorts|command[0]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[107] -to "SDRAM_Ports:sdramPorts|command[10]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[108] -to "SDRAM_Ports:sdramPorts|command[11]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[109] -to "SDRAM_Ports:sdramPorts|command[12]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[110] -to "SDRAM_Ports:sdramPorts|command[13]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[111] -to "SDRAM_Ports:sdramPorts|command[14]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[112] -to "SDRAM_Ports:sdramPorts|command[15]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[113] -to "SDRAM_Ports:sdramPorts|command[16]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[114] -to "SDRAM_Ports:sdramPorts|command[17]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[115] -to "SDRAM_Ports:sdramPorts|command[18]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[116] -to "SDRAM_Ports:sdramPorts|command[19]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[117] -to "SDRAM_Ports:sdramPorts|command[1]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[118] -to "SDRAM_Ports:sdramPorts|command[20]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[119] -to "SDRAM_Ports:sdramPorts|command[21]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[120] -to "SDRAM_Ports:sdramPorts|command[22]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[121] -to "SDRAM_Ports:sdramPorts|command[23]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[122] -to "SDRAM_Ports:sdramPorts|command[24]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[123] -to "SDRAM_Ports:sdramPorts|command[25]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[124] -to "SDRAM_Ports:sdramPorts|command[26]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[125] -to "SDRAM_Ports:sdramPorts|command[27]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[126] -to "SDRAM_Ports:sdramPorts|command[28]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[127] -to "SDRAM_Ports:sdramPorts|command[29]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[128] -to "SDRAM_Ports:sdramPorts|command[2]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[129] -to "SDRAM_Ports:sdramPorts|command[30]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[130] -to "SDRAM_Ports:sdramPorts|command[31]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[131] -to "SDRAM_Ports:sdramPorts|command[32]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[132] -to "SDRAM_Ports:sdramPorts|command[33]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[133] -to "SDRAM_Ports:sdramPorts|command[34]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[134] -to "SDRAM_Ports:sdramPorts|command[35]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[135] -to "SDRAM_Ports:sdramPorts|command[36]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[136] -to "SDRAM_Ports:sdramPorts|command[37]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[137] -to "SDRAM_Ports:sdramPorts|command[38]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[138] -to "SDRAM_Ports:sdramPorts|command[39]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[139] -to "SDRAM_Ports:sdramPorts|command[3]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[140] -to "SDRAM_Ports:sdramPorts|command[40]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[141] -to "SDRAM_Ports:sdramPorts|command[41]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[142] -to "SDRAM_Ports:sdramPorts|command[4]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[143] -to "SDRAM_Ports:sdramPorts|command[5]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[144] -to "SDRAM_Ports:sdramPorts|command[6]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[145] -to "SDRAM_Ports:sdramPorts|command[7]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[146] -to "SDRAM_Ports:sdramPorts|command[8]" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[147] -to "SDRAM_Ports:sdramPorts|command[9]" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=148" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=148" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_BITS=148" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=461" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=8" -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[0] -to SDRAM_20readout_20monitor|gnd -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[1] -to SDRAM_20readout_20monitor|vcc -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[5] -to SDRAM_20readout_20monitor|gnd -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[6] -to SDRAM_20readout_20monitor|vcc -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[7] -to SDRAM_20readout_20monitor|gnd -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[9] -to SDRAM_20readout_20monitor|vcc -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[12] -to SDRAM_20readout_20monitor|gnd -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[13] -to SDRAM_20readout_20monitor|vcc -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[14] -to SDRAM_20readout_20monitor|vcc -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[15] -to SDRAM_20readout_20monitor|vcc -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[17] -to SDRAM_20readout_20monitor|vcc -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[19] -to SDRAM_20readout_20monitor|gnd -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[20] -to SDRAM_20readout_20monitor|vcc -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[21] -to SDRAM_20readout_20monitor|vcc -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[24] -to SDRAM_20readout_20monitor|gnd -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[25] -to SDRAM_20readout_20monitor|vcc -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[28] -to SDRAM_20readout_20monitor|vcc -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[29] -to SDRAM_20readout_20monitor|gnd -section_id SDRAM_20readout_20monitor
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[31] -to SDRAM_20readout_20monitor|gnd -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=256" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ADVANCED_TRIGGER_ENTITY=basic,1," -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ENABLE_ADVANCED_TRIGGER=0" -section_id SDRAM_20readout_20monitor
+set_global_assignment -name SLD_FILE db/SignalTap_auto_stripped.stp
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

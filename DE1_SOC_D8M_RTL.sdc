@@ -1,39 +1,61 @@
+## Generated SDC file "DE1_SOC_D8M_RTL.sdc"
+
+## Copyright (C) 2017  Intel Corporation. All rights reserved.
+## Your use of Intel Corporation's design tools, logic functions 
+## and other software and tools, and its AMPP partner logic 
+## functions, and any output files from any of the foregoing 
+## (including device programming or simulation files), and any 
+## associated documentation or information are expressly subject 
+## to the terms and conditions of the Intel Program License 
+## Subscription Agreement, the Intel Quartus Prime License Agreement,
+## the Intel MegaCore Function License Agreement, or other 
+## applicable license agreement, including, without limitation, 
+## that your use is for the sole purpose of programming logic 
+## devices manufactured by Intel and sold by Intel or its 
+## authorized distributors.  Please refer to the applicable 
+## agreement for further details.
+
+
+## VENDOR  "Altera"
+## PROGRAM "Quartus Prime"
+## VERSION "Version 17.0.0 Build 595 04/25/2017 SJ Lite Edition"
+
+## DATE    "Tue Apr  2 16:10:21 2019"
+
+##
+## DEVICE  "5CSEMA5F31C6"
+##
+
+
 #**************************************************************
-# This .sdc file is created by Terasic Tool.
-# Users are recommended to modify this file to match users logic.
+# Time Information
 #**************************************************************
+
+set_time_format -unit ns -decimal_places 3
+
+
+
 #**************************************************************
 # Create Clock
 #**************************************************************
-create_clock -period "50.0 MHz"  -name CLOCK2_50 [get_ports CLOCK2_50]
-create_clock -period "50.0 MHz"  -name CLOCK3_50 [get_ports CLOCK3_50]
-create_clock -period "50.0 MHz"  -name CLOCK_50  [get_ports CLOCK_50 ]
-create_clock -period "25.0 MHz"  -name MIPI_PIXEL_CLK [get_ports MIPI_PIXEL_CLK]
 
-
-# for enhancing USB BlasterII to be reliable, 25MHz
-create_clock -name {altera_reserved_tck} -period 40 {altera_reserved_tck}
-set_input_delay -clock altera_reserved_tck -clock_fall 3 [get_ports altera_reserved_tdi]
-set_input_delay -clock altera_reserved_tck -clock_fall 3 [get_ports altera_reserved_tms]
-set_output_delay -clock altera_reserved_tck 3 [get_ports altera_reserved_tdo]
-
-#SDRAM CLK
-create_generated_clock -source [get_pins {u0|pll_sys|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] \
-                      -name clk_dram_ext [get_ports {DRAM_CLK}]
-#VGA CLK
-create_generated_clock -source [get_pins { u0|pll_sys|altera_pll_i|general[3].gpll~PLL_OUTPUT_COUNTER|divclk }] \
-                      -name clk_vga_ext [get_ports {VGA_CLK}] -invert
-
-#D8M							 
-create_clock -period "25.0 MHz" -name MIPI_PIXEL_CLK [get_ports MIPI_PIXEL_CLK]
-create_clock -period "25.0 MHz" -name MIPI_PIXEL_CLK_ext
+create_clock -name {CLOCK2_50} -period 20.000 -waveform { 0.000 10.000 } [get_ports {CLOCK2_50}]
+create_clock -name {CLOCK3_50} -period 20.000 -waveform { 0.000 10.000 } [get_ports {CLOCK3_50}]
+create_clock -name {CLOCK_50} -period 20.000 -waveform { 0.000 10.000 } [get_ports {CLOCK_50}]
+create_clock -name {MIPI_PIXEL_CLK} -period 40.000 -waveform { 0.000 20.000 } [get_ports {MIPI_PIXEL_CLK}]
+create_clock -name {MIPI_PIXEL_CLK_ext} -period 40.000 -waveform { 0.000 20.000 } 
+create_clock -name {DRAM_CLK} -period 8.000 -waveform { 0.000 4.000 } [get_ports {DRAM_CLK}]
+create_clock -name {CLOCK4_50} -period 20.000 -waveform { 0.000 10.000 } [get_ports {CLOCK4_50}]
 
 
 #**************************************************************
 # Create Generated Clock
 #**************************************************************
-derive_pll_clocks
 
+create_generated_clock -name {clockGenerator|pll_genclocks_inst|altera_pll_i|general[0].gpll~FRACTIONAL_PLL|vcoph[0]} -source [get_pins {clockGenerator|pll_genclocks_inst|altera_pll_i|general[0].gpll~FRACTIONAL_PLL|refclkin}] -duty_cycle 50/1 -multiply_by 20 -divide_by 2 -master_clock {CLOCK_50} [get_pins {clockGenerator|pll_genclocks_inst|altera_pll_i|general[0].gpll~FRACTIONAL_PLL|vcoph[0]}] 
+create_generated_clock -name {clockGenerator|pll_genclocks_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk} -source [get_pins {clockGenerator|pll_genclocks_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|vco0ph[0]}] -duty_cycle 50/1 -multiply_by 1 -divide_by 25 -master_clock {clockGenerator|pll_genclocks_inst|altera_pll_i|general[0].gpll~FRACTIONAL_PLL|vcoph[0]} [get_pins {clockGenerator|pll_genclocks_inst|altera_pll_i|general[0].gpll~PLL_OUTPUT_COUNTER|divclk}] 
+create_generated_clock -name {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk} -source [get_pins {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|vco0ph[0]}] -duty_cycle 50/1 -multiply_by 1 -divide_by 20 -master_clock {clockGenerator|pll_genclocks_inst|altera_pll_i|general[0].gpll~FRACTIONAL_PLL|vcoph[0]} [get_pins {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] 
+create_generated_clock -name {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk} -source [get_pins {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|vco0ph[0]}] -duty_cycle 50/1 -multiply_by 1 -divide_by 4 -master_clock {clockGenerator|pll_genclocks_inst|altera_pll_i|general[0].gpll~FRACTIONAL_PLL|vcoph[0]} [get_pins {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] 
 
 
 #**************************************************************
@@ -45,67 +67,136 @@ derive_pll_clocks
 #**************************************************************
 # Set Clock Uncertainty
 #**************************************************************
-derive_clock_uncertainty
 
+set_clock_uncertainty -rise_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -rise_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -setup 0.080  
+set_clock_uncertainty -rise_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -rise_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -hold 0.060  
+set_clock_uncertainty -rise_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -fall_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -setup 0.080  
+set_clock_uncertainty -rise_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -fall_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -hold 0.060  
+set_clock_uncertainty -rise_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -rise_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -setup 0.080  
+set_clock_uncertainty -rise_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -rise_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -hold 0.060  
+set_clock_uncertainty -rise_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -fall_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -setup 0.080  
+set_clock_uncertainty -rise_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -fall_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -hold 0.060  
+set_clock_uncertainty -rise_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -rise_to [get_clocks {MIPI_PIXEL_CLK}]  0.260  
+set_clock_uncertainty -rise_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -fall_to [get_clocks {MIPI_PIXEL_CLK}]  0.260  
+set_clock_uncertainty -fall_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -rise_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -setup 0.080  
+set_clock_uncertainty -fall_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -rise_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -hold 0.060  
+set_clock_uncertainty -fall_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -fall_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -setup 0.080  
+set_clock_uncertainty -fall_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -fall_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -hold 0.060  
+set_clock_uncertainty -fall_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -rise_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -setup 0.080  
+set_clock_uncertainty -fall_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -rise_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -hold 0.060  
+set_clock_uncertainty -fall_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -fall_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -setup 0.080  
+set_clock_uncertainty -fall_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -fall_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -hold 0.060  
+set_clock_uncertainty -fall_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -rise_to [get_clocks {MIPI_PIXEL_CLK}]  0.260  
+set_clock_uncertainty -fall_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -fall_to [get_clocks {MIPI_PIXEL_CLK}]  0.260  
+set_clock_uncertainty -rise_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -rise_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -setup 0.080  
+set_clock_uncertainty -rise_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -rise_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -hold 0.060  
+set_clock_uncertainty -rise_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -fall_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -setup 0.080  
+set_clock_uncertainty -rise_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -fall_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -hold 0.060  
+set_clock_uncertainty -rise_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -rise_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -setup 0.080  
+set_clock_uncertainty -rise_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -rise_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -hold 0.060  
+set_clock_uncertainty -rise_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -fall_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -setup 0.080  
+set_clock_uncertainty -rise_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -fall_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -hold 0.060  
+set_clock_uncertainty -fall_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -rise_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -setup 0.080  
+set_clock_uncertainty -fall_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -rise_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -hold 0.060  
+set_clock_uncertainty -fall_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -fall_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -setup 0.080  
+set_clock_uncertainty -fall_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -fall_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -hold 0.060  
+set_clock_uncertainty -fall_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -rise_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -setup 0.080  
+set_clock_uncertainty -fall_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -rise_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -hold 0.060  
+set_clock_uncertainty -fall_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -fall_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -setup 0.080  
+set_clock_uncertainty -fall_from [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -fall_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}] -hold 0.060  
+set_clock_uncertainty -rise_from [get_clocks {MIPI_PIXEL_CLK}] -rise_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}]  0.260  
+set_clock_uncertainty -rise_from [get_clocks {MIPI_PIXEL_CLK}] -fall_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}]  0.260  
+set_clock_uncertainty -rise_from [get_clocks {MIPI_PIXEL_CLK}] -rise_to [get_clocks {MIPI_PIXEL_CLK}] -setup 0.310  
+set_clock_uncertainty -rise_from [get_clocks {MIPI_PIXEL_CLK}] -rise_to [get_clocks {MIPI_PIXEL_CLK}] -hold 0.270  
+set_clock_uncertainty -rise_from [get_clocks {MIPI_PIXEL_CLK}] -fall_to [get_clocks {MIPI_PIXEL_CLK}] -setup 0.310  
+set_clock_uncertainty -rise_from [get_clocks {MIPI_PIXEL_CLK}] -fall_to [get_clocks {MIPI_PIXEL_CLK}] -hold 0.270  
+set_clock_uncertainty -fall_from [get_clocks {MIPI_PIXEL_CLK}] -rise_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}]  0.260  
+set_clock_uncertainty -fall_from [get_clocks {MIPI_PIXEL_CLK}] -fall_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}]  0.260  
+set_clock_uncertainty -fall_from [get_clocks {MIPI_PIXEL_CLK}] -rise_to [get_clocks {MIPI_PIXEL_CLK}] -setup 0.310  
+set_clock_uncertainty -fall_from [get_clocks {MIPI_PIXEL_CLK}] -rise_to [get_clocks {MIPI_PIXEL_CLK}] -hold 0.270  
+set_clock_uncertainty -fall_from [get_clocks {MIPI_PIXEL_CLK}] -fall_to [get_clocks {MIPI_PIXEL_CLK}] -setup 0.310  
+set_clock_uncertainty -fall_from [get_clocks {MIPI_PIXEL_CLK}] -fall_to [get_clocks {MIPI_PIXEL_CLK}] -hold 0.270  
+set_clock_uncertainty -rise_from [get_clocks {MIPI_PIXEL_CLK_ext}] -rise_to [get_clocks {MIPI_PIXEL_CLK}]  0.160  
+set_clock_uncertainty -rise_from [get_clocks {MIPI_PIXEL_CLK_ext}] -fall_to [get_clocks {MIPI_PIXEL_CLK}]  0.160  
+set_clock_uncertainty -fall_from [get_clocks {MIPI_PIXEL_CLK_ext}] -rise_to [get_clocks {MIPI_PIXEL_CLK}]  0.160  
+set_clock_uncertainty -fall_from [get_clocks {MIPI_PIXEL_CLK_ext}] -fall_to [get_clocks {MIPI_PIXEL_CLK}]  0.160  
+set_clock_uncertainty -rise_from [get_clocks {CLOCK2_50}] -rise_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}]  0.260  
+set_clock_uncertainty -rise_from [get_clocks {CLOCK2_50}] -fall_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}]  0.260  
+set_clock_uncertainty -rise_from [get_clocks {CLOCK2_50}] -rise_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}]  0.260  
+set_clock_uncertainty -rise_from [get_clocks {CLOCK2_50}] -fall_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}]  0.260  
+set_clock_uncertainty -rise_from [get_clocks {CLOCK2_50}] -rise_to [get_clocks {MIPI_PIXEL_CLK}]  0.310  
+set_clock_uncertainty -rise_from [get_clocks {CLOCK2_50}] -fall_to [get_clocks {MIPI_PIXEL_CLK}]  0.310  
+set_clock_uncertainty -rise_from [get_clocks {CLOCK2_50}] -rise_to [get_clocks {CLOCK2_50}] -setup 0.310  
+set_clock_uncertainty -rise_from [get_clocks {CLOCK2_50}] -rise_to [get_clocks {CLOCK2_50}] -hold 0.270  
+set_clock_uncertainty -rise_from [get_clocks {CLOCK2_50}] -fall_to [get_clocks {CLOCK2_50}] -setup 0.310  
+set_clock_uncertainty -rise_from [get_clocks {CLOCK2_50}] -fall_to [get_clocks {CLOCK2_50}] -hold 0.270  
+set_clock_uncertainty -fall_from [get_clocks {CLOCK2_50}] -rise_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}]  0.260  
+set_clock_uncertainty -fall_from [get_clocks {CLOCK2_50}] -fall_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}]  0.260  
+set_clock_uncertainty -fall_from [get_clocks {CLOCK2_50}] -rise_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}]  0.260  
+set_clock_uncertainty -fall_from [get_clocks {CLOCK2_50}] -fall_to [get_clocks {clockGenerator|pll_genclocks_inst|altera_pll_i|general[1].gpll~PLL_OUTPUT_COUNTER|divclk}]  0.260  
+set_clock_uncertainty -fall_from [get_clocks {CLOCK2_50}] -rise_to [get_clocks {MIPI_PIXEL_CLK}]  0.310  
+set_clock_uncertainty -fall_from [get_clocks {CLOCK2_50}] -fall_to [get_clocks {MIPI_PIXEL_CLK}]  0.310  
+set_clock_uncertainty -fall_from [get_clocks {CLOCK2_50}] -rise_to [get_clocks {CLOCK2_50}] -setup 0.310  
+set_clock_uncertainty -fall_from [get_clocks {CLOCK2_50}] -rise_to [get_clocks {CLOCK2_50}] -hold 0.270  
+set_clock_uncertainty -fall_from [get_clocks {CLOCK2_50}] -fall_to [get_clocks {CLOCK2_50}] -setup 0.310  
+set_clock_uncertainty -fall_from [get_clocks {CLOCK2_50}] -fall_to [get_clocks {CLOCK2_50}] -hold 0.270  
 
 
 #**************************************************************
 # Set Input Delay
 #**************************************************************
-# tpd  min 1ns ,max 6ns
-# suppose +- 100 ps skew
-# Board Delay (Data) + Propagation Delay - Board Delay (Clock)
 
-# D8M						  
-# tpd  min 1ns ,max 6ns
-set_input_delay -max 6.1 -clock  MIPI_PIXEL_CLK_ext  [get_ports {MIPI_PIXEL_VS MIPI_PIXEL_HS MIPI_PIXEL_D[*]}]
-set_input_delay -min 0.9 -clock  MIPI_PIXEL_CLK_ext  [get_ports {MIPI_PIXEL_VS MIPI_PIXEL_HS MIPI_PIXEL_D[*]}]
-
-# SDRAM
-# max 5.4(max) +0.4(trace delay) +0.1  = 5.9
-# min 2.7(min) +0.4(trace delay) -0.1  = 3.0
-set_input_delay -max -clock clk_dram_ext 5.9 [get_ports DRAM_DQ*]
-set_input_delay -min -clock clk_dram_ext 3.0 [get_ports DRAM_DQ*]
-#shift-window
-set_multicycle_path -from [get_clocks {clk_dram_ext}] \
-                    -to [get_clocks {u0|pll_sys|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] \
-						  -setup 2           
-
+set_input_delay -add_delay -max -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  6.100 [get_ports {MIPI_PIXEL_D[0]}]
+set_input_delay -add_delay -min -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  0.900 [get_ports {MIPI_PIXEL_D[0]}]
+set_input_delay -add_delay -max -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  6.100 [get_ports {MIPI_PIXEL_D[1]}]
+set_input_delay -add_delay -min -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  0.900 [get_ports {MIPI_PIXEL_D[1]}]
+set_input_delay -add_delay -max -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  6.100 [get_ports {MIPI_PIXEL_D[2]}]
+set_input_delay -add_delay -min -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  0.900 [get_ports {MIPI_PIXEL_D[2]}]
+set_input_delay -add_delay -max -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  6.100 [get_ports {MIPI_PIXEL_D[3]}]
+set_input_delay -add_delay -min -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  0.900 [get_ports {MIPI_PIXEL_D[3]}]
+set_input_delay -add_delay -max -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  6.100 [get_ports {MIPI_PIXEL_D[4]}]
+set_input_delay -add_delay -min -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  0.900 [get_ports {MIPI_PIXEL_D[4]}]
+set_input_delay -add_delay -max -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  6.100 [get_ports {MIPI_PIXEL_D[5]}]
+set_input_delay -add_delay -min -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  0.900 [get_ports {MIPI_PIXEL_D[5]}]
+set_input_delay -add_delay -max -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  6.100 [get_ports {MIPI_PIXEL_D[6]}]
+set_input_delay -add_delay -min -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  0.900 [get_ports {MIPI_PIXEL_D[6]}]
+set_input_delay -add_delay -max -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  6.100 [get_ports {MIPI_PIXEL_D[7]}]
+set_input_delay -add_delay -min -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  0.900 [get_ports {MIPI_PIXEL_D[7]}]
+set_input_delay -add_delay -max -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  6.100 [get_ports {MIPI_PIXEL_D[8]}]
+set_input_delay -add_delay -min -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  0.900 [get_ports {MIPI_PIXEL_D[8]}]
+set_input_delay -add_delay -max -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  6.100 [get_ports {MIPI_PIXEL_D[9]}]
+set_input_delay -add_delay -min -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  0.900 [get_ports {MIPI_PIXEL_D[9]}]
+set_input_delay -add_delay -max -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  6.100 [get_ports {MIPI_PIXEL_HS}]
+set_input_delay -add_delay -min -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  0.900 [get_ports {MIPI_PIXEL_HS}]
+set_input_delay -add_delay -max -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  6.100 [get_ports {MIPI_PIXEL_VS}]
+set_input_delay -add_delay -min -clock [get_clocks {MIPI_PIXEL_CLK_ext}]  0.900 [get_ports {MIPI_PIXEL_VS}]
 
 
 #**************************************************************
 # Set Output Delay
 #**************************************************************
-# suppose +- 100 ps skew
-# max : Board Delay (Data) - Board Delay (Clock) + tsu (External Device)
-# min : Board Delay (Data) - Board Delay (Clock) - th (External Device)
 
-#SDRAM
-# max  1.5+0.1 =  1.6
-# min -0.8-0.1 = -0.9
-set_output_delay -max -clock clk_dram_ext 1.6  [get_ports {DRAM_DQ* DRAM_*DQM}]
-set_output_delay -min -clock clk_dram_ext -0.9 [get_ports {DRAM_DQ* DRAM_*DQM}]
-set_output_delay -max -clock clk_dram_ext 1.6  [get_ports {DRAM_ADDR* DRAM_BA* DRAM_RAS_N DRAM_CAS_N DRAM_WE_N DRAM_CKE DRAM_CS_N}]
-set_output_delay -min -clock clk_dram_ext -0.9 [get_ports {DRAM_ADDR* DRAM_BA* DRAM_RAS_N DRAM_CAS_N DRAM_WE_N DRAM_CKE DRAM_CS_N}]
 
-#VGA
-# max  0.2+0.1 =  0.3
-# min -1.5-0.1 = -1.6
-set_output_delay -max -clock clk_vga_ext  0.3 [get_ports {VGA_R* VGA_G* VGA_B* VGA_BLANK}]
-set_output_delay -min -clock clk_vga_ext -1.6 [get_ports {VGA_R* VGA_G* VGA_B* VGA_BLANK}]
 
 #**************************************************************
 # Set Clock Groups
 #**************************************************************
-set_clock_groups -asynchronous -group [get_clocks {u0|pll_sys|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] \
-                               -group [get_clocks {MIPI_PIXEL_CLK}]
+
+set_clock_groups -asynchronous -group [get_clocks {u0|pll_sys|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -group [get_clocks {MIPI_PIXEL_CLK}] 
+set_clock_groups -asynchronous -group [get_clocks {u0|pll_sys|altera_pll_i|general[2].gpll~PLL_OUTPUT_COUNTER|divclk}] -group [get_clocks {MIPI_PIXEL_CLK}] 
 
 
 #**************************************************************
 # Set False Path
 #**************************************************************
-set_false_path -from [get_ports {KEY* SW*}] -to *
-set_false_path -from * -to [get_ports {LED* HEX*}]
+
+set_false_path -from [get_keepers {*rdptr_g*}] -to [get_keepers {*ws_dgrp|dffpipe_id9:dffpipe16|dffe17a*}]
+set_false_path -from [get_keepers {*delayed_wrptr_g*}] -to [get_keepers {*rs_dgwp|dffpipe_hd9:dffpipe13|dffe14a*}]
+set_false_path -from [get_keepers {*rdptr_g*}] -to [get_keepers {*ws_dgrp|dffpipe_qe9:dffpipe16|dffe17a*}]
+set_false_path -from [get_keepers {*delayed_wrptr_g*}] -to [get_keepers {*rs_dgwp|dffpipe_pe9:dffpipe12|dffe13a*}]
+set_false_path -from [get_keepers {*delayed_wrptr_g*}] -to [get_keepers {*rs_dgwp|dffpipe_jd9:dffpipe6|dffe7a*}]
+set_false_path -from [get_ports {KEY* SW*}] 
+set_false_path -to [get_ports {LED* HEX*}]
 
 
 #**************************************************************
@@ -129,12 +220,4 @@ set_false_path -from * -to [get_ports {LED* HEX*}]
 #**************************************************************
 # Set Input Transition
 #**************************************************************
-
-
-
-#**************************************************************
-# Set Load
-#**************************************************************
-
-
 

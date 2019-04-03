@@ -222,13 +222,28 @@ assign CAMERA_I2C_SCL =( I2C_RELEASE  )?  CAMERA_I2C_SCL_AF  : CAMERA_I2C_SCL_MI
 //------ CLOCK GENERATOR --
 PLL_GenClocks clockGenerator (
       .refclk(CLOCK_50), .rst(0), // Configured the PLL to have an automatic self-reset
-      .outclk_0(MIPI_REFCLK), // MIPI / VGA REF CLOCK, 20 MHz
-      .outclk_1(VGA_CLK), // MIPI / VGA REF CLOCK, 25 MHz
+      .outclk_0(),//(MIPI_REFCLK), // MIPI / VGA REF CLOCK, 20 MHz
+      .outclk_1(),//(VGA_CLK), // MIPI / VGA REF CLOCK, 25 MHz
       .outclk_2(clk125), // SDRAM controller clock, 125 MHz
       .locked() // true if the PLL has acquired (locked onto) the reference clock
    );
    
-   
+  //------MIPI / VGA REF CLOCK  --
+pll_test pll_ref(
+	                   .inclk0 ( CLOCK3_50 ),
+	                   .areset ( ~KEY[2]   ),
+	                   .c0( MIPI_REFCLK    ) //20Mhz
+
+    );
+	 
+//------MIPI / VGA REF CLOCK  -
+VIDEO_PLL pll_ref1(
+	                   .inclk0 ( CLOCK2_50 ),
+	                   .areset ( ~KEY[2] ),
+	                   .c0( VGA_CLK )        //25 Mhz	
+    );	 
+
+ 
 //----- RESET RELAY  --		
 RESET_DELAY u2 (	
       .iRST  ( KEY[2] ),
@@ -256,16 +271,24 @@ MIPI_BRIDGE_CAMERA_Config    cfin(
    logic cameraPixelIsValid;
    logic [18:0] cameraPixelAddress;
    CameraCoordTracker camTracker (
-				  .clk(MIPI_PIXEL_CLK_), .arst(~DLY_RST_0),
-				  .hsync_n(MIPI_PIXEL_HS), .vsync_n(MIPI_PIXEL_VS),
+				  .clk(MIPI_PIXEL_CLK), .arst(~DLY_RST_0),
+				  .hsync_n(LUT_MIPI_PIXEL_HS), .vsync_n(LUT_MIPI_PIXEL_VS),
 				  .pixelValid(cameraPixelIsValid),
 				  .pixelAddress(cameraPixelAddress), .x(), .y()
 				  );
 
 //------ SDRAM CONTROLLER AND PORT WRAPPER --
    // Instantiates the SDRAM inside a wrapper that multiplexes multiple ports at lower speeds into the SDRAM's single port at high speed
+   logic 	srstSlow, srst, srstMS0, srstMS1;
+   logic [26:0] srstCtr = 27'd0; // overflows @ 1.07 Hz (counting @ 125 MHz)
+   always_ff @(posedge clk125) begin
+      {srst, srstMS1, srstMS0} <= {srstMS1, srstMS0, ~KEY[2]};
+      srstCtr <= srstCtr + 27'd0;
+      if (srstCtr == 0) srstSlow <= srst;
+   end
+	
    SDRAM_Ports sdramPorts (
-			   .clk(clockSDRAM), .rst(~DLY_RST_0),
+			   .clk(clk125), .rst(srstSlow),
 			   // Port C: camera write port
 			   .portC_clk(MIPI_PIXEL_CLK_),
 			   .portC_aclr(~DLY_RST_0),
@@ -298,12 +321,12 @@ MIPI_BRIDGE_CAMERA_Config    cfin(
 
 			   // Add your own custom ports, or share Port0
 
+
 			   // SDRAM connections
 			   .DRAM_DQ, .DRAM_ADDR, .DRAM_BA, .DRAM_CAS_N, .DRAM_CKE,
 			   .DRAM_CLK, .DRAM_CS_N, .DRAM_LDQM, .DRAM_RAS_N, .DRAM_UDQM, .DRAM_WE_N
 			   );
    
-
 
    // Create a reset signal that's true for one clock cycle after the FPGA boots and stays off forever afterwards
    //logic SDRAM_ControllerReset = 1;

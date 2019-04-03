@@ -239,8 +239,6 @@ module SDRAM_Ports (
          .DRAM_CLK, .DRAM_CS_N, .DRAM_LDQM, .DRAM_RAS_N, .DRAM_UDQM, .DRAM_WE_N
       );
 
-   // Read filtering should be done here
-
    // PortV output data FIFO ([7:0] PortVout_wrreq defined near PortV cmd FIFO)
    logic PortVout_nullData, PortVout_wrreq;
    FIFO_PortVout portVFIFOout (
@@ -251,8 +249,10 @@ module SDRAM_Ports (
 			 );
    // Write the correct rdata to the PortV output FIFO and prevent it from becoming empty with dummy data when necessary
    logic [18:0] VGA_addrTracker, nextVGA_addrTracker;
+	logic addrMatches;
    always_comb begin
-      if ( (raddr == ({6'd0, VGA_addrTracker} + portV_readOffset)) & readValid ) begin
+		addrMatches = (raddr == ({6'd0, VGA_addrTracker} + portV_readOffset));
+      if ( addrMatches & readValid ) begin
 	 // Readout is valid at the correct VGA_addrTracker in the right order
 	 PortVout_wrreq = 1;
 	 PortVout_nullData = 0;
@@ -284,6 +284,7 @@ module SDRAM_Ports (
 			 
 			 .rdclk(port0_clk1), .rdreq(port0_read), .rdempty(port0_empty), .q(port0_dout)
 			 );
+   // Read filtering should be done here
    always_comb begin // AOI
       // Don't spam Port0 with VGA data
       // Port0filter = 1 iff raddr outside of [offset+640*480 - 1 : offset]
