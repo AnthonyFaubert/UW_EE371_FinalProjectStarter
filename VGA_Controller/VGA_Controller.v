@@ -15,7 +15,7 @@ module	VGA_Controller(
       output 		 oVGA_BLANK,
       output reg [12:0]  H_Cont,
       output reg [12:0]  V_Cont,
-      output wire [12:0] x, y
+      output wire [9:0] x, y // 2^10 > H_SYNC_TOTAL (800)
 		);
 
 //=======================================================
@@ -30,8 +30,10 @@ parameter V_MARK   = 9; //MAX 9
 // Structural coding
 //=======================================================
 
-   assign x = H_Cont - H_BLANK;
-   assign y = V_Cont - V_BLANK;
+   wire [12:0] xTmp, yTmp;
+   assign xTmp = H_Cont - H_BLANK;
+   assign yTmp = V_Cont - V_BLANK;
+   assign {x, y} = {xTmp[9:0], yTmp[9:0]};  // throw away 3 unused bits
 
 //---h 								  
 always@(posedge iCLK or negedge iRST_N)

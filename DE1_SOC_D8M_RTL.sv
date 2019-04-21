@@ -221,8 +221,12 @@ assign I2C_RELEASE    = CAMERA_MIPI_RELAESE & MIPI_BRIDGE_RELEASE;
 assign CAMERA_I2C_SCL =( I2C_RELEASE  )?  CAMERA_I2C_SCL_AF  : CAMERA_I2C_SCL_MIPI ;   
 
 //------ CLOCK GENERATOR --
+// Supposedly has auto self-reset, but it never gets a lock
+// Create a reset signal that's true for one clock cycle after the FPGA boots and stays off forever afterwards
+logic PLL_BootReset = 1;
+always_ff @(posedge CLOCK_50) PLL_BootReset <= 0;
 PLL_GenClocks clockGenerator (
-      .refclk(CLOCK_50), .rst(0), // Configured the PLL to have an automatic self-reset
+      .refclk(CLOCK_50), .rst(~KEY[0]), // Configured the PLL to have an automatic self-reset
       .outclk_0(MIPI_REFCLK), // MIPI / VGA REF CLOCK, 20 MHz
       .outclk_1(VGA_CLK), // MIPI / VGA REF CLOCK, 25 MHz
       .outclk_2(clk125), // SDRAM controller clock, 125 MHz
@@ -391,8 +395,8 @@ VGA_Controller u1 ( // Host Side
 		    .iRST_N     ( DLY_RST_2 ),
 		    .H_Cont     ( VGA_H_CNT ),
 		    .V_Cont     ( VGA_V_CNT ),
-		    .x(),
-		    .y()
+		    .x(VGA_x),
+		    .y(VGA_y)
 );
 
 //------VS FREQUENCY TEST = 60HZ --

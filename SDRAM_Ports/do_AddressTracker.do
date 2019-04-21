@@ -3,13 +3,9 @@ vlib work
 
 # List of additional files required to simulate this one. Ex:
 # set ADDITIONAL_FILES {"rom32x8.v" "submodule.sv"} # NEVER ADD BB FILE FOR RAM/ROM!
-# set ADDITIONAL_FILES ""
-set ADDITIONAL_FILES {
-"AddressTracker.sv" "../DE1_SDRAM/SafeSDRAM.sv" "../DE1_SDRAM/EasySDRAM_CmdFIFO.v" "../DE1_SDRAM/EasySDRAM.sv"
-"FIFO_PortC.v" "FIFO_Port0cmd.v" "FIFO_PortVcmd.v" "FIFO_Port0out.v" "FIFO_PortVout.v"
-}
+set ADDITIONAL_FILES ""
 # "" or "-Lf altera_mf_ver"
-set EXTRA_LIBS "-Lf altera_mf_ver"
+set EXTRA_LIBS ""
 
 # Set MOD_NAME to the stuff in-between the dos: do_THISSTUFF.do
 variable hist [history]

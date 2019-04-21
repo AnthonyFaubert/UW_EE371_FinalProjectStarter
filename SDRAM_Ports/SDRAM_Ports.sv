@@ -24,8 +24,6 @@ module SDRAM_Ports (
          input logic [15:0] port0_din,
          output logic [40:0] port0_dout,
 
-         // Add your own custom ports
-
 
          // SDRAM I/O, connect to top-level SDRAM I/O //
          inout [15:0] DRAM_DQ, // Data input/output port. Each data word is 16 bits = 2 bytes
@@ -98,26 +96,31 @@ module SDRAM_Ports (
    assign PortVcmd[41] = 1'b0; // PortV always reads
    assign PortVcmd[15:0] = 'X;
    logic xyInBounds;
-   logic [18:0] currentPixelAddress; // 2^19 > 640*480
+   logic [18:0] currentPixelID, desiredPixelID; // 2^19 > 640*480
    logic [24:0] desiredPixelAddress, lastDesiredPixAddr;
    always_comb begin
       xyInBounds = (VGAx < 10'd640) & (VGAy < 10'd480);
-      // currentPixelAddress = 640*VGAy + VGAx
-      currentPixelAddress = {VGAy, 9'd0} + {2'd0, VGAy, 7'd0} + {9'd0, VGAx};
+      // currentPixelID = 640*VGAy + VGAx
+      currentPixelID = {VGAy, 9'd0} + {2'd0, VGAy, 7'd0} + {9'd0, VGAx};
       // VGA_READ_AHEAD_MARGIN should be adjusted so that emptying the command buffer (cmdbUsedw/2 cycles) plus VGA_READ_AHEAD_MARGIN clock cycles is enough time for a value to be read to prevent the PortV output FIFO from emptying
-      // desiredPixelAddress = readOffset + currentPixelAddress + VGA_READ_AHEAD_MARGIN + cmdbUsedw
-      desiredPixelAddress = readOffset + 
-{6'd0,( currentPixelAddress + VGA_READ_AHEAD_MARGIN + {11'd0, cmdbUsedw} )};
+      // desiredPixelAddress = readOffset + (currentPixelID + VGA_READ_AHEAD_MARGIN + cmdbUsedw) % 640*480
+      desiredPixelID = currentPixelID + VGA_READ_AHEAD_MARGIN + {11'd0, cmdbUsedw};
+      if (desiredPixelID < 19'd307200) begin
+	 desiredPixelAddress = readOffset + {6'd0, desiredPixelID};
+      end else begin
+	 desiredPixelAddress = readOffset + {6'd0, (desiredPixelID - 19'd307200)};
+      end
    end
    always_ff @(posedge clk) begin
       if (rst) begin
 	 {PortVempty, PortVcmd[40:16]} <= 0;
       end else begin
 	 if (xyInBounds) begin
-	    // If it's a new value, we haven't sent it
-	    if (PortVcmd[40:16] != desiredPixelAddress) PortVempty <= 0;
-	    
-	    PortVcmd[40:16] <= desiredPixelAddress;
+	    // If it's a new value that comes after the previous one in the series, send it
+	    if ((PortVcmd[40:16] < desiredPixelID) | ((PortVcmd[40:16] != 19'd0) & (desiredPixelID == 19'd0))) begin
+	       PortVempty <= 0;
+	       PortVcmd[40:16] <= desiredPixelAddress;
+	    end
 	 end
 	 
 	 // If the request is being sent to the SDRAM, it's now an old value
@@ -263,35 +266,11 @@ module SDRAM_Ports (
 			 
 			 .rdclk(portV_clk), .rdreq(portV_nextDout), .q(portV_dout)
 			 );
-   // Write the correct rdata to the PortV output FIFO and prevent it from becoming empty with dummy data when necessary
-   logic [18:0] VGA_addrTracker, nextVGA_addrTracker;
-	logic addrMatches;
-   always_comb begin
-		addrMatches = (raddr == ({6'd0, VGA_addrTracker} + portV_readOffset));
-      if ( addrMatches & readValid ) begin
-	 // Readout is valid at the correct VGA_addrTracker in the right order
-	 PortVout_wrreq = 1;
-	 PortVout_nullData = 0;
-	 // VGA_addrTracker = (VGA_addrTracker + 1) % (640*480)
-	 nextVGA_addrTracker = (VGA_addrTracker == 19'd307199) ? 19'd0 : (VGA_addrTracker + 19'd1);
-      end else if (PortVout_usedw <= 9'd1) begin
-	 // Output FIFO might be about to be empty, prevent that from ever happening by writing dummy data
-	 PortVout_wrreq = 1;
-	 PortVout_nullData = 1;
-	 // VGA_addrTracker = (VGA_addrTracker + 1) % (640*480)
-	 nextVGA_addrTracker = (VGA_addrTracker == 19'd307199) ? 19'd0 : (VGA_addrTracker + 19'd1);
-      end else begin
-	 // Do nothing
-	 PortVout_wrreq = 0;
-	 PortVout_nullData = 0;
-	 nextVGA_addrTracker = VGA_addrTracker;
-      end
-   end
-   always_ff @(posedge clk, posedge portV_arst) begin
-      if (portV_arst) VGA_addrTracker <= 0;
-      else VGA_addrTracker <= nextVGA_addrTracker;
-   end
-   
+
+   // Determines what readout should go into portVFIFOout next, and controls portVFIFOout's ports accordingly.
+   // Also prevents the FIFO from becoming empty by writing null data when necessary.
+   AddressTracker vgaAddrTracker (.*);
+
    // Port0 readout FIFO
    logic Port0filter;
    FIFO_Port0out port0FIFOout (
