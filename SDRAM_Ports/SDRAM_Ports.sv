@@ -121,7 +121,7 @@ module SDRAM_Ports (
 	 end
 	 
 	 // If the request is being sent to the SDRAM, it's now an old value
-	 if (rdPortV) PortVemtpy <= 1;
+	 if (rdPortV) PortVempty <= 1;
       end
    end
 
@@ -312,10 +312,11 @@ module SDRAM_Ports_tb ();
    logic clk, rst,
 	 portC_clk, portC_aclr, portC_write,
 	 portV_clk, portV_arst, portV_nextDout,
-	 port0_clk0, port0_aclr0, port0_clk1, port0_aclr1, port0_wrreq, port0_rdreq,
+	 port0_clk0, port0_aclr0,
+	 port0_clk1, port0_aclr1, port0_wrreq, port0_rdreq,
 	 port0_read, port0_full, port0_empty;
    logic [24:0] portC_addr, portV_readOffset, port0_addr;
-   logic [9:0] 	portC_din;
+   logic [9:0] 	portC_din, portV_VGAx, portV_VGAy;
    logic [15:0] port0_din, portV_dout;
    logic [40:0] port0_dout;
 

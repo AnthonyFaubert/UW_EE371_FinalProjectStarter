@@ -139,7 +139,7 @@ module DE1_SOC_D8M_RTL(
 					.oVGA_HS(post_VGA_HS), .oVGA_VS(post_VGA_VS),
 					.oVGA_SYNC_N(post_VGA_SYNC_N), .oVGA_BLANK_N(post_VGA_BLANK_N),
 					.HEX0(HEX0), .HEX1(HEX1), .HEX2(HEX2), .HEX3(HEX3), .HEX4(HEX4), .HEX5(HEX5),
-					.LEDR(LEDR), .KEY(KEY[1:0]), .SW(SW[8:0]));
+					.LEDR(), .KEY(KEY[1:0]), .SW(SW[8:0])); // TODO RECONNECT LEDR
 					
 	assign VGA_BLANK_N = post_VGA_BLANK_N;
 	assign VGA_B = post_VGA_B;
@@ -226,7 +226,7 @@ PLL_GenClocks clockGenerator (
       .outclk_0(MIPI_REFCLK), // MIPI / VGA REF CLOCK, 20 MHz
       .outclk_1(VGA_CLK), // MIPI / VGA REF CLOCK, 25 MHz
       .outclk_2(clk125), // SDRAM controller clock, 125 MHz
-      .locked() // true if the PLL has acquired (locked onto) the reference clock
+      .locked(LEDR0) // true if the PLL has acquired (locked onto) the reference clock
    );
     
 //----- RESET RELAY  --		
@@ -241,7 +241,7 @@ RESET_DELAY u2 (
  
 //------ MIPI BRIGE & CAMERA SETTING  --  
 MIPI_BRIDGE_CAMERA_Config    cfin(
-                      .RESET_N           ( RESET_N ), 
+                      .RESET_N           ( RESET_N ),
                       .CLK_50            ( CLOCK2_50 ), 
                       .MIPI_I2C_SCL      ( MIPI_I2C_SCL ), 
                       .MIPI_I2C_SDA      ( MIPI_I2C_SDA ), 
@@ -254,9 +254,11 @@ MIPI_BRIDGE_CAMERA_Config    cfin(
 //------ CAMERA COORDINATE TRACKER --
    // Determine current camera pixel coordinates
    logic cameraPixelIsValid;
+	assign LEDR[8] = cameraPixelIsValid; // TODO DELETE
+	assign LEDR[7:6] = 2'd1;
    logic [18:0] cameraPixelAddress;
    CameraCoordTracker camTracker (
-				  .clk(MIPI_PIXEL_CLK), .arst(~DLY_RST_0),
+				  .clk(MIPI_PIXEL_CLK_), .arst(~DLY_RST_0),
 				  .hsync_n(LUT_MIPI_PIXEL_HS), .vsync_n(LUT_MIPI_PIXEL_VS),
 				  .pixelValid(cameraPixelIsValid),
 				  .pixelAddress(cameraPixelAddress), .x(), .y()
@@ -364,7 +366,7 @@ FOCUS_ADJ adl(
               .oG            ( pre_VGA_G ) , 
               .oB            ( pre_VGA_B ) , 
               
-              .READY         (), // ( READY ),
+              .READY         (LEDR[9]), // ( READY ),// TODO DISCONNECT
               .SCL           ( CAMERA_I2C_SCL_AF ), 
               .SDA           ( CAMERA_I2C_SDA )
 );
