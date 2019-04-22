@@ -195,6 +195,7 @@ logic [12:0] VGA_x, VGA_y; // x and y of the current VGA pixel
 // Structural coding
 //=======================================================
 //--INPU MIPI-PIXEL-CLOCK DELAY
+// Combinationally delay this clock to pass hold timing requirements. It may not look necessary, but your design will not work without it.
 CLOCK_DELAY  del1(  .iCLK (MIPI_PIXEL_CLK),  .oCLK (MIPI_PIXEL_CLK_ ) );
 
 
@@ -223,15 +224,21 @@ assign CAMERA_I2C_SCL =( I2C_RELEASE  )?  CAMERA_I2C_SCL_AF  : CAMERA_I2C_SCL_MI
 //------ CLOCK GENERATOR --
 // Supposedly has auto self-reset, but it never gets a lock
 // Create a reset signal that's true for one clock cycle after the FPGA boots and stays off forever afterwards
-logic PLL_BootReset = 1;
-always_ff @(posedge CLOCK_50) PLL_BootReset <= 0;
+//logic PLL_BootReset = 1;
+//always_ff @(posedge CLOCK_50) PLL_BootReset <= 0;
 PLL_GenClocks clockGenerator (
-      .refclk(CLOCK_50), .rst(~KEY[0]), // Configured the PLL to have an automatic self-reset
-      .outclk_0(MIPI_REFCLK), // MIPI / VGA REF CLOCK, 20 MHz
+      .refclk(CLOCK_50), .rst(0), // Configured the PLL to have an automatic self-reset
+      .outclk_0(),//MIPI_REFCLK), // MIPI / VGA REF CLOCK, 20 MHz
       .outclk_1(VGA_CLK), // MIPI / VGA REF CLOCK, 25 MHz
       .outclk_2(clk125), // SDRAM controller clock, 125 MHz
       .locked(LEDR0) // true if the PLL has acquired (locked onto) the reference clock
    );
+//------MIPI / VGA REF CLOCK  --
+pll_test pll_ref(
+	                   .inclk0 ( CLOCK3_50 ),
+	                   .areset ( ~KEY[2]   ),
+	                   .c0( MIPI_REFCLK    ) //20Mhz
+    );
     
 //----- RESET RELAY  --		
 RESET_DELAY u2 (	

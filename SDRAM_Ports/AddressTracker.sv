@@ -2,11 +2,52 @@
 `timescale 1 ns / 1 ps
 
 module AddressTracker (
-		       input logic 	   clk, portV_arst, readValid,
-		       input logic [24:0]  raddr, readOffset,
-		       input logic [8:0]   PortVout_usedw,
-		       output logic 	   PortVout_wrreq, PortVout_nullData
+		       input logic 	  clk, portV_arst, readValid,
+		       input logic [24:0] raddr, readOffset,
+		       input logic [8:0]  PortVout_usedw,
+		       input logic [9:0]  VGAx, VGAy,
+		       output logic 	  PortVout_wrreq, PortVout_nullData
 		       );
+   // Write the correct rdata to the PortV output FIFO and prevent it from becoming empty with dummy data when necessary
+   logic [18:0] VGA_addrTracker, nVGA_addrTracker;
+   logic addrMatches;
+   logic [7:0] catchup, ncatchup;
+	logic usedwLT2; // PortVout_usedw < 9'd2
+   always_comb begin
+		usedwLT2 = ~(|PortVout_usedw[8:1]);
+      // default unchanged
+      ncatchup = catchup;
+
+      nVGA_addrTracker = {VGAy, 9'd0} + {2'd0, VGAy, 7'd0} + {9'd0, VGAx} + {10'd0, PortVout_usedw};
+      addrMatches = (raddr == ({6'd0, VGA_addrTracker} + readOffset));
+      if ( addrMatches & readValid ) begin
+	 // Readout is valid at the correct VGA_addrTracker in the right order
+	 PortVout_wrreq = 1;
+	 PortVout_nullData = 0;
+	 ncatchup = 8'd0;
+      end else if (usedwLT2 | (catchup != 8'd0)) begin
+	 // Output FIFO might be about to be empty, prevent that from ever happening by writing dummy data
+	 //  OR we're trying to catchup to the readout, so write dummy data
+	 PortVout_wrreq = 1;
+	 PortVout_nullData = 1;
+	 if (catchup != 8'd0) ncatchup = catchup - 8'd1;
+      end else begin // always_comb
+	 if (readValid & (raddr < (VGA_addrTracker + 19'd255))) begin
+	    // We've fallen behind the readout, try to catch up
+	    ncatchup = raddr - VGA_addrTracker;
+	 end
+	 // Do nothing
+	 PortVout_wrreq = 0;
+	 PortVout_nullData = 0;
+      end
+   end
+   always_ff @(posedge clk, posedge portV_arst) begin
+		VGA_addrTracker <= nVGA_addrTracker;
+      if (portV_arst) catchup <= '0;
+      else catchup <= ncatchup;
+   end
+   
+   /*
    // Write the correct rdata to the PortV output FIFO and prevent it from becoming empty with dummy data when necessary
    logic [18:0] VGA_addrTracker, nextVGA_addrTracker;
    logic addrMatches;
@@ -35,12 +76,14 @@ module AddressTracker (
       if (portV_arst) VGA_addrTracker <= 0;
       else VGA_addrTracker <= nextVGA_addrTracker;
    end
+    */
 endmodule
 
 module AddressTracker_tb ();
    logic clk, portV_arst, readValid, PortVout_wrreq, PortVout_nullData;
    logic [24:0] raddr, readOffset, addr;
    logic [8:0] 	PortVout_usedw;
+   logic [9:0] 	VGAx, VGAy;
 
    AddressTracker dut (.*);
 

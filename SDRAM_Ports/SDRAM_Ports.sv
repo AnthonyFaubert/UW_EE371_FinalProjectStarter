@@ -258,13 +258,13 @@ module SDRAM_Ports (
       );
 
    // PortV output data FIFO ([7:0] PortVout_wrreq defined near PortV cmd FIFO)
-   logic PortVout_nullData, PortVout_wrreq;
+   logic PortVout_nullData, PortVout_wrreq, PortVout_rdempty;
    logic [8:0] PortVout_usedw;
-   FIFO_PortVout portVFIFOout (
+   FIFO_PortVout_ver2 portVFIFOout (
 			 .aclr(portV_arst),
-			 .wrclk(clk), .wrreq(PortVout_wrreq), .data(PortVout_nullData ? VGA_NULL_DATA_COLOR : rdata), .wrusedw(PortVout_usedw),
+			 .wrclk(clk), .wrreq((PortVout_usedw != 9'd511) & PortVout_wrreq), .data(PortVout_nullData ? VGA_NULL_DATA_COLOR : rdata), .wrusedw(PortVout_usedw),
 			 
-			 .rdclk(portV_clk), .rdreq(portV_nextDout), .q(portV_dout)
+			 .rdclk(portV_clk), .rdreq(~PortVout_rdempty & portV_nextDout), .q(portV_dout), .rdempty(PortVout_rdempty)
 			 );
 
    // Determines what readout should go into portVFIFOout next, and controls portVFIFOout's ports accordingly.
