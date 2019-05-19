@@ -48,10 +48,10 @@ else
 		    end		  
 	  //----I2C READ-COMMAND---
 	    1: begin  //start 
-		      ST <=2 ; 
-			   { SDAO,  SCLO } <= 2'b01; 
-				A <= {SLAVE_ADDRESS[0], 1'b1};//READ COMMAND
-		    end
+	       ST <=2; 
+	       {SDAO, SCLO} <= 2'b01; 
+	       A <= {SLAVE_ADDRESS | 8'd1, 1'b1}; // READ COMMAND
+	    end
 	    2: begin  //start 
 		      ST <=3 ; 
 			   { SDAO,  SCLO } <= 2'b00; 
